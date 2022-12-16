@@ -1,0 +1,17 @@
+{
+  "all": true,
+  "exclude": [
+    "**/tests/**",
+    "**tools/**",
+    "**/.husky/**",
+    "**/node_modules/**",
+    "**/coverage/**",
+    "**/dist/**",
+    "**/reports/**",
+    "**.vscode/**"
+  ],
+  "extension": [
+    "js"
+  ],
+  "reportsDir": "./reports/coverage"
+}

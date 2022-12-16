@@ -1,0 +1,32 @@
+{
+  "dictionaryDefinitions": [
+    {
+      "name": "matrix",
+      "path": "tools/dictionary.txt",
+      "addWords": true
+    }
+  ],
+  "dictionaries": [
+    "matrix",
+    "bash",
+    "docker",
+    "networking-terms",
+    "node",
+    "npm",
+    "en-gb",
+    "fr-fr"
+  ],
+  "ignoreRegExpList": [
+    "/[^\\s]{40,}/",
+    "\"uid\": \".*\"",
+    "\\*\\*[A-Z]\\*\\*.* "
+  ],
+  "ignorePaths": [
+    "node_modules",
+    "**/node_modules",
+    "**/node_modules/**",
+    "pnpm-lock.yaml"
+  ],
+  "language": "en",
+  "enableFiletypes": ["*"]
+}

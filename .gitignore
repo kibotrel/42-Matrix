@@ -1,0 +1,25 @@
+# JS files
+node_modules
+.eslintcache
+.stylelintcache
+dist
+
+# Config files
+*.env
+*.pem
+*.b64
+
+# Misc
+.DS_Store
+.log
+.zip
+.csv
+.npmrc
+.tmp
+certs
+cache
+TODO*
+todo*
+.VSCodeCounter
+.nyc_output
+reports

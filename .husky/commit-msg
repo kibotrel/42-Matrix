@@ -1,0 +1,16 @@
+#!/usr/bin/env bash
+
+set -e
+
+[ "$SKIP_COMMIT_MSG" = 1 ] && exit 0
+
+. "$(dirname "$0")/_/husky.sh"
+
+pnpm commitlint --edit "$1"
+
+result=$( cat "$1" | pnpm cspell --show-context --no-progress --no-summary stdin 2>&1 || true )
+if ! [ -z "$result" ]; then
+  echo "→ Commit message didn't pass spellcheck:"
+  echo "$result"
+  exit 1
+fi

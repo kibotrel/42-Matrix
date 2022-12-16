@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "module": "CommonJS",
+    "target": "ES2021",
+    "baseUrl": ".",
+    "paths": {
+      "#src/*": [
+        "srcs/*"
+      ],
+      "#utils": [
+        "srcs/utils/index.js"
+      ],
+      "#classes": [
+        "srcs/classes/index.js"
+      ],
+    }
+  },
+  "include": [
+    "./srcs/**/*.js",
+  ]
+}

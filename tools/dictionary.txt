@@ -1,0 +1,10 @@
+BOTREL
+camelcase
+commitlint
+Kilian
+npmrc
+Parens
+sonarjs
+srcs
+stylelint
+stylelintcache
