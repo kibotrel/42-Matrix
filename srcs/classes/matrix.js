@@ -9,7 +9,7 @@ import { Numeral, Vector } from '#classes'
  * @property {Vector[]} matrix - Array of Vector.
  * @property {number} rows - Number of rows.
  * @property {number} columns - Number of columns.
- * @property {number} size - Size of the matrix.
+ * @property {Vector} shape - Shape of the matrix.
  */
 
 /**
