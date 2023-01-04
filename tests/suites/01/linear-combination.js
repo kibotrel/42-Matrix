@@ -46,7 +46,7 @@ export default () => {
       expect(result.equals(expected)).to.be.true
     })
 
-    it('[[ 4 + 2i, 9 - 8i ], [ 7 - 3i, 1 + 5i ]] with [1 + 4i, -4 + 6i] = [-14 + 72i, 7 + 14i]', () => {
+    it('[[4 + 2i, 9 - 8i], [7 - 3i, 1 + 5i]] with [1 + 4i, -4 + 6i] = [-14 + 72i, 7 + 14i]', () => {
       const matrix = new Matrix([
         new Vector([new Numeral(4, 2), new Numeral(9, -8)]),
         new Vector([new Numeral(7, -3), new Numeral(1, 5)])
