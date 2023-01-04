@@ -1,6 +1,6 @@
 import util from 'node:util'
 
-import { Numeral } from '#classes'
+import { Numeral, Matrix } from '#classes'
 
 /**
  * This class represents a vector. Its value is an array of Numeral.
@@ -136,6 +136,65 @@ export class Vector {
     }
 
     return new Vector(result)
+  }
+
+  /**
+   * Computes the multiplication reduction of a vector.
+   * This is equivalent to multiplying all the elements of the vector.
+   *
+   * @returns {Numeral} - Result of the multiplication reduction.
+   * @throws {Error} - Vector must not be empty.
+   */
+  productReduce() {
+    if (this.size === 0) {
+      throw new Error('Vector must not be empty.')
+    }
+
+    return this.vector.reduce(
+      (result, value) => result.multiply(value),
+      new Numeral(1)
+    )
+  }
+
+  /**
+   * Converts a vector to a matrix.
+   *
+   * @param {Vector} shape - Shape of the matrix.
+   * @returns {Matrix} - Matrix representation of the vector.
+   * @throws {Error} - Argument must be an instance of Vector.
+   */
+  toMatrix(shape) {
+    if (this.size === 0) {
+      return new Matrix()
+    }
+
+    if (!(shape instanceof Vector)) {
+      throw new TypeError('Argument must be an instance of Vector.')
+    } else if (shape.size !== 2) {
+      throw new Error('Argument must be a 2D vector.')
+    } else if (shape.vector.some((numeral) => !numeral.isInteger())) {
+      throw new Error('Argument must be a 2D vector of integers.')
+    } else if (shape.vector.some((numeral) => numeral.r <= 0)) {
+      throw new Error('Argument must be a 2D vector of positive integers.')
+    } else if (!shape.productReduce().equals(new Numeral(this.size))) {
+      throw new Error(
+        'Argument must be a 2D vector of integers whose product is equal to the size of the vector.'
+      )
+    }
+
+    const matrix = []
+
+    for (let row = 0; row < shape.vector.at(0).r; row++) {
+      const vector = []
+
+      for (let column = 0; column < shape.vector.at(1).r; column++) {
+        vector.push(this.vector[row * shape.vector.at(1).r + column])
+      }
+
+      matrix.push(new Vector(vector))
+    }
+
+    return new Matrix(matrix)
   }
 
   /**
