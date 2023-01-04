@@ -85,6 +85,13 @@ export default () => {
       expect(numeral).to.have.property('isComplex')
       expect(numeral.isComplex).to.be.a('function')
     })
+
+    it('Conjugate', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('conjugate')
+      expect(numeral.conjugate).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -295,7 +302,7 @@ export default () => {
       })
     })
 
-    describe('isInteger', () => {
+    describe('IsInteger', () => {
       it('Zero', () => {
         const numeral = new Numeral(0)
 
@@ -327,7 +334,7 @@ export default () => {
       })
     })
 
-    describe('isReal', () => {
+    describe('IsReal', () => {
       it('Zero', () => {
         const numeral = new Numeral(0)
 
@@ -359,7 +366,7 @@ export default () => {
       })
     })
 
-    describe('isComplex', () => {
+    describe('IsComplex', () => {
       it('Zero', () => {
         const numeral = new Numeral(0)
 
@@ -388,6 +395,38 @@ export default () => {
         const numeral = new Numeral(1, 1)
 
         expect(numeral.isComplex()).to.equal(true)
+      })
+    })
+
+    describe('Conjugate', () => {
+      it('Zero', () => {
+        const numeral = new Numeral(0)
+
+        expect(numeral.conjugate().equals(numeral)).to.be.true
+      })
+
+      it('Integer', () => {
+        const numeral = new Numeral(1)
+
+        expect(numeral.conjugate().equals(numeral)).to.be.true
+      })
+
+      it('Real', () => {
+        const numeral = new Numeral(1.1)
+
+        expect(numeral.conjugate().equals(numeral)).to.be.true
+      })
+
+      it('Imaginary', () => {
+        const numeral = new Numeral(0, 1)
+
+        expect(numeral.conjugate().equals(new Numeral(0, -1))).to.be.true
+      })
+
+      it('Complex', () => {
+        const numeral = new Numeral(1, 1)
+
+        expect(numeral.conjugate().equals(new Numeral(1, -1))).to.be.true
       })
     })
   })

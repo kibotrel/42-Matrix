@@ -205,6 +205,38 @@ export class Vector {
   }
 
   /**
+   * Computes the dot product of two vectors.
+   * This is equivalent to multiplying the two vectors and then summing the result.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Vector} vector - Vector to compute the dot product with.
+   * @returns {Numeral} - Result of the dot product.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @throws {TypeError} - Argument must be an instance of Vector.
+   * @throws {AssertionError} - Vector must not be empty.
+   *
+   */
+  dot(vector) {
+    if (!(vector instanceof Vector)) {
+      throw new TypeError('Argument must be an instance of Vector.')
+    } else if (this.size !== vector.size) {
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
+    } else if (this.size === 0) {
+      throw new AssertionError({ message: 'Vectors must not be empty.' })
+    }
+
+    // We're potentially dealing with complex numbers. To successfully compute the dot product, we need to conjugate the
+    // second each term of the second vector and use the inner product. Then, we can compute the real part of the result
+    // to get the dot product. More details: https://college.cengage.com/mathematics/larson/elementary_linear/4e/shared/downloads/c08s4.pdf
+
+    const { r } = this.vector.reduce(
+      (result, value, index) =>
+        result.add(value.multiply(vector.vector[index].conjugate())), new Numeral(0))
+
+    return new Numeral(r)
+  }
+
+  /**
    * Generates a random vector of size `size`.
    *
    * @description Space complexity: O(n), time complexity: O(n).

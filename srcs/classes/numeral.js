@@ -164,6 +164,18 @@ export class Numeral {
   }
 
   /**
+   * Computes the conjugate of the complex number.
+   * The conjugate of a complex number is the number with the same real part
+   * and an imaginary part equal in magnitude but opposite in sign.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Numeral} - Conjugate of the complex number.
+   */
+  conjugate() {
+    return new Numeral(this.r, -this.i)
+  }
+
+  /**
    * Generates a random Numeral.
    *
    * @description Space complexity: O(1), Time complexity: O(1).
