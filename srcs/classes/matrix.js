@@ -126,6 +126,18 @@ export class Matrix {
     return new Matrix(result)
   }
 
+  equals(matrix) {
+    if (!(matrix instanceof Matrix)) {
+      throw new TypeError('Argument must be an instance of Matrix.')
+    } else if (!this.shape.equals(matrix.shape)) {
+      throw new Error('Matrices must be of the same shape.')
+    }
+
+    return this.matrix.every((vector, index) =>
+      vector.equals(matrix.matrix[index])
+    )
+  }
+
   /**
    * Scales a matrix.
    *
