@@ -80,6 +80,11 @@ export default () => {
       expect(Vector).to.have.property('random')
       expect(Vector.random).to.be.a('function')
     })
+
+    it('Initialize', () => {
+      expect(Vector).to.have.property('initialize')
+      expect(Vector.initialize).to.be.a('function')
+    })
   })
 
   describe('Values', () => {
@@ -403,6 +408,56 @@ export default () => {
 
       it('Vector size must be a positive integer', () => {
         expect(() => Vector.random(-5)).to.throw(
+          AssertionError,
+          'Size must be a positive integer.'
+        )
+      })
+    })
+
+    describe('Initialize', () => {
+      it('No arguments', () => {
+        expect(() => Vector.initialize()).to.throw(
+          TypeError,
+          'Size must be an integer.'
+        )
+      })
+
+      it('Default behaviour', () => {
+        const vector = Vector.initialize(5)
+
+        expect(vector.vector).to.be.an('array')
+        expect(vector.vector.length).to.equal(5)
+        expect(vector.size).to.equal(5)
+        expect(vector.vector.every((element) => element.equals(new Numeral(0)))).to.be.true
+      })
+
+      it('Vector with one element', () => {
+        const vector = Vector.initialize(1, new Numeral(2))
+
+        expect(vector.vector).to.be.an('array')
+        expect(vector.vector.length).to.equal(1)
+        expect(vector.size).to.equal(1)
+        expect(vector.vector[0].equals(new Numeral(2))).to.be.true
+      })
+
+      it('Vector with many elements', () => {
+        const vector = Vector.initialize(5, new Numeral(2))
+
+        expect(vector.vector).to.be.an('array')
+        expect(vector.vector.length).to.equal(5)
+        expect(vector.size).to.equal(5)
+        expect(vector.vector.every((element) => element.equals(new Numeral(2)))).to.be.true
+      })
+
+      it('Vector size must be an integer', () => {
+        expect(() => Vector.initialize(1.2, new Numeral(2))).to.throw(
+          TypeError,
+          'Size must be an integer.'
+        )
+      })
+
+      it('Vector size must be a positive integer', () => {
+        expect(() => Vector.initialize(-5, new Numeral(2))).to.throw(
           AssertionError,
           'Size must be a positive integer.'
         )

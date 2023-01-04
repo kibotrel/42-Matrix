@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { Vector, Numeral, Matrix } from '#classes'
+import { Numeral } from '#classes'
 
 export default () => {
   describe('Numeral', () => {

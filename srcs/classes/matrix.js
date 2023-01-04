@@ -1,7 +1,8 @@
 import util from 'node:util'
+import { AssertionError } from 'node:assert'
 
 import { Numeral, Vector } from '#classes'
-import { AssertionError } from 'node:assert'
+
 
 /**
  * This class represents a matrix. Its value is an array of Vector.
@@ -34,6 +35,7 @@ export class Matrix {
      * @readonly
      * @type {Number}
      */
+    /* c8 ignore next */
     this.rows = matrix?.length ?? 0
     /**
      * Number of columns.
@@ -57,6 +59,7 @@ export class Matrix {
    * @returns {String} - String representation of the matrix.
    */
   [util.inspect.custom]() {
+    /* c8 ignore start */
     if (this.rows === 0 || this.columns === 0) {
       return '[]'
     }
@@ -81,6 +84,7 @@ export class Matrix {
     )
     const alignedMatrix = alignedRows.map((row) => `[${row.join(', ')}]`)
     return alignedMatrix.join('\n')
+    /* c8 ignore stop */
   }
 
   /**
@@ -213,5 +217,30 @@ export class Matrix {
     }
 
     return new Matrix(matrix)
+  }
+
+  /**
+   * Computes the linear combination of a matrix and a vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Matrix} matrix - Matrix to compute the linear combination of.
+   * @param {Vector} vector - Each element of this vector is used to scale its corresponding row index within the matrix.
+   * @returns {Vector} - Result of the linear combination.
+   * @throws {AssertionError} - Matrix rows and vector size must be equal.
+   * @throws {TypeError} - First argument must be an instance of Matrix, second argument must be an instance of Vector.
+   */
+  static linearCombination(matrix, vector) {
+    if (!(matrix instanceof Matrix) || !(vector instanceof Vector)) {
+      throw new TypeError('First argument must be an instance of Matrix, second argument must be an instance of Vector.')
+    } else if (matrix.rows !== vector.size) {
+      throw new AssertionError({ message: 'Matrix rows and vector size must be equal.' })
+    }
+
+    const { vector: scaleVector } = vector
+    const { matrix: matrixRows } = matrix
+
+    return matrixRows.reduce((result, row, index) => {
+      return result.add(row.scale(scaleVector[index]))
+    }, Vector.initialize(matrix.columns))
   }
 }

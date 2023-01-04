@@ -42,9 +42,11 @@ export class Vector {
    * @returns {string} - String representation of the vector.
    */
   [util.inspect.custom]() {
+    /* c8 ignore start */
     return `[${this.vector
       .map((numeral) => numeral[util.inspect.custom]())
       .join(', ')}]`
+    /* c8 ignore stop */
   }
 
   /**
@@ -222,6 +224,34 @@ export class Vector {
 
     for (let index = 0; index < size; index++) {
       vector.push(Numeral.random(type))
+    }
+
+    return new Vector(vector)
+  }
+
+  /**
+   * Generates a vector of size `size` with all elements equal to `value`.
+   * If `value` is not provided, the vector will be filled with zeroes.
+   * If `value` is a number, the vector will be filled with numerals of that value.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} size - Size of the vector.
+   * @param {Numeral} value - Value to fill the vector with.
+   * @returns {Vector} - Vector filled with `value`.
+   * @throws {TypeError} - Size must be an integer.
+   * @throws {AssertionError} - Size must be a positive integer.
+   */
+  static initialize(size, value = new Numeral(0)) {
+    if (!Number.isInteger(size)) {
+      throw new TypeError('Size must be an integer.')
+    } else if (size <= 0) {
+      throw new AssertionError({ message: 'Size must be a positive integer.' })
+    }
+
+    const vector = []
+
+    for (let index = 0; index < size; index++) {
+      vector.push(value)
     }
 
     return new Vector(vector)

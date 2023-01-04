@@ -93,6 +93,11 @@ export default () => {
       expect(Matrix).to.have.property('random')
       expect(Matrix.random).to.be.a('function')
     })
+
+    it('linearCombination', () => {
+      expect(Matrix).to.have.property('linearCombination')
+      expect(Matrix.linearCombination).to.be.a('function')
+    })
   })
 
 
