@@ -49,11 +49,17 @@ export class Numeral {
     if (imaginary === 0) {
       return chalk.yellow(`${real}`)
     } else if (real === 0) {
-      return chalk.yellow(`${imaginary}i`)
+      return chalk.yellow(
+        `${imaginary !== 1 && imaginary !== -1 ? imaginary : ''}i`
+      )
     } else if (imaginary < 0) {
-      return chalk.yellow(`${real} - ${-imaginary}i`)
+      return chalk.yellow(
+        `${real} - ${imaginary !== 1 && imaginary !== -1 ? -imaginary : ''}i`
+      )
     } else {
-      return chalk.yellow(`${real} + ${imaginary}i`)
+      return chalk.yellow(
+        `${real} + ${imaginary !== 1 && imaginary !== -1 ? imaginary : ''}i`
+      )
     }
   }
 
@@ -122,6 +128,33 @@ export class Numeral {
   }
 
   /**
+   * Checks if the number is an integer.
+   *
+   * @returns {boolean} - True if the number is an integer, false otherwise.
+   */
+  isInteger() {
+    return Number.isInteger(this.r) && this.i === 0
+  }
+
+  /**
+   * Checks if the number is real.
+   *
+   * @returns {boolean} - True if the number is real, false otherwise.
+   */
+  isReal() {
+    return this.i === 0
+  }
+
+  /**
+   * Checks if the number is complex.
+   *
+   * @returns {boolean} - True if the number is complex, false otherwise.
+   */
+  isComplex() {
+    return this.i !== 0
+  }
+
+  /**
    * Generates a random Numeral.
    *
    * @param {string} type - Type of the Numeral.
@@ -143,7 +176,7 @@ export class Numeral {
       case 'imaginary-integer': {
         return new Numeral(0, signImaginary * Math.floor(Math.random() * 100))
       }
-      case 'imaginary-real': {
+      case 'imaginary-decimal': {
         return new Numeral(0, signImaginary * Math.random() * 100)
       }
       case 'complex-integer': {
@@ -152,7 +185,7 @@ export class Numeral {
           signImaginary * Math.floor(Math.random() * 100)
         )
       }
-      case 'complex-real': {
+      case 'complex-decimal': {
         return new Numeral(
           signReal * Math.random() * 100,
           signImaginary * Math.random() * 100
