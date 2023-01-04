@@ -406,7 +406,32 @@ export default () => {
         expect(numeral.i).to.equal(0)
       })
 
-      it('Generate a random complex number', () => {
+      it('Generate a random imaginary integer', () => {
+        const numeral = Numeral.random('imaginary-integer')
+
+        expect(numeral.r).to.equal(0)
+        expect(numeral.i).to.be.a('number')
+        expect(Number.isInteger(numeral.i)).to.equal(true)
+      })
+
+      it('Generate a random imaginary decimal', () => {
+        const numeral = Numeral.random('imaginary-decimal')
+
+        expect(numeral.r).to.equal(0)
+        expect(numeral.i).to.be.a('number')
+        expect(Number.isInteger(numeral.i)).to.equal(false)
+      })
+
+      it('Generate a random complex integer', () => {
+        const numeral = Numeral.random('complex-integer')
+
+        expect(numeral.r).to.be.a('number')
+        expect(Number.isInteger(numeral.r)).to.equal(true)
+        expect(numeral.i).to.be.a('number')
+        expect(Number.isInteger(numeral.i)).to.equal(true)
+      })
+
+      it('Generate a random complex decimal', () => {
         const numeral = Numeral.random('complex-decimal')
 
         expect(numeral.r).to.be.a('number')

@@ -43,6 +43,7 @@ export class Numeral {
    * @returns {String} - String representation of the number.
    */
   [util.inspect.custom]() {
+    /* c8 ignore start */
     const real = fixDecimals(this.r)
     const imaginary = fixDecimals(this.i)
 
@@ -61,6 +62,7 @@ export class Numeral {
         `${real} + ${imaginary !== 1 && imaginary !== -1 ? imaginary : ''}i`
       )
     }
+    /* c8 ignore stop */
   }
 
   /**
