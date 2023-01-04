@@ -1,15 +1,16 @@
 import util from 'node:util'
 
 import { Numeral, Vector } from '#classes'
+import { AssertionError } from 'node:assert'
 
 /**
  * This class represents a matrix. Its value is an array of Vector.
  *
- * @typedef {object} Matrix
+ * @typedef {Object} Matrix
  * @property {Vector[]} matrix - Array of Vector.
- * @property {number} rows - Number of rows.
- * @property {number} columns - Number of columns.
- * @property {Vector} shape - Shape of the matrix.
+ * @property {Number} rows - Number of rows.
+ * @property {Number} columns - Number of columns.
+ * @property {Number[]} shape - Shape of the matrix.
  */
 
 /**
@@ -31,14 +32,14 @@ export class Matrix {
      * Number of rows.
      *
      * @readonly
-     * @type {number}
+     * @type {Number}
      */
     this.rows = matrix?.length ?? 0
     /**
      * Number of columns.
      *
      * @readonly
-     * @type {number}
+     * @type {Number}
      */
     this.columns = matrix?.at(0)?.size ?? 0
     /**
@@ -47,13 +48,13 @@ export class Matrix {
      * @readonly
      * @type {Vector}
      */
-    this.shape = new Vector([new Numeral(this.rows), new Numeral(this.columns)])
+    this.shape = [this.rows, this.columns]
   }
 
   /**
    * Returns a string representation of the matrix.
    *
-   * @returns {string} - String representation of the matrix.
+   * @returns {String} - String representation of the matrix.
    */
   [util.inspect.custom]() {
     if (this.rows === 0 || this.columns === 0) {
@@ -84,17 +85,18 @@ export class Matrix {
 
   /**
    * Adds two matrices.
-   *
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Matrix} matrix - Matrix to add.
    * @returns {Matrix} - Result of the addition.
-   * @throws {Error} - Matrices must be of the same shape.
-   * @throws {Error} - Argument must be an instance of Matrix.
+   * @throws {AssertionError} - Matrices must be of the same shape.
+   * @throws {TypeError} - Argument must be an instance of Matrix.
    */
   add(matrix) {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
-    } else if (!this.shape.equals(matrix.shape)) {
-      throw new Error('Matrices must be of the same shape.')
+    } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
+      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
     }
 
     const result = this.matrix.map((vector, index) =>
@@ -107,16 +109,17 @@ export class Matrix {
   /**
    * Subtracts two matrices.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Matrix} matrix - Matrix to subtract.
    * @returns {Matrix} - Result of the subtraction.
-   * @throws {Error} - Matrices must be of the same shape.
-   * @throws {Error} - Argument must be an instance of Matrix.
+   * @throws {AssertionError} - Matrices must be of the same shape.
+   * @throws {TypeError} - Argument must be an instance of Matrix.
    */
   subtract(matrix) {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
-    } else if (!this.shape.equals(matrix.shape)) {
-      throw new Error('Matrices must be of the same shape.')
+    } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
+      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
     }
 
     const result = this.matrix.map((vector, index) =>
@@ -126,11 +129,21 @@ export class Matrix {
     return new Matrix(result)
   }
 
+  /**
+   * Checks if two matrices are equal.
+   * Two matrices are equal if they have the same shape and the same values.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Matrix} matrix - Matrix to compare.
+   * @returns {Boolean} - True if the matrices are equal, false otherwise.
+   * @throws {AssertionError} - Matrices must be of the same shape.
+   * @throws {TypeError} - Argument must be an instance of Matrix.
+   */
   equals(matrix) {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
-    } else if (!this.shape.equals(matrix.shape)) {
-      throw new Error('Matrices must be of the same shape.')
+    } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
+      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
     }
 
     return this.matrix.every((vector, index) =>
@@ -141,9 +154,10 @@ export class Matrix {
   /**
    * Scales a matrix.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Numeral} numeral - Numeral to scale the matrix with.
    * @returns {Matrix} - Result of the scaling.
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   scale(numeral) {
     if (!(numeral instanceof Numeral)) {
@@ -158,9 +172,46 @@ export class Matrix {
   /**
    * Check if the matrix is square.
    *
-   * @returns {boolean} - True if the matrix is square, false otherwise.
+   * @description Space complexity: O(1), time complexity: O(1).
+   * @returns {Boolean} - True if the matrix is square, false otherwise.
    */
   isSquare() {
     return this.rows === this.columns
+  }
+
+  /**
+   * Converts a matrix to a vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @returns {Vector} - Vector representation of the matrix.
+   */
+  toVector() {
+    return new Vector(this.matrix.map((vector) => vector.vector).flat())
+  }
+
+  /**
+   * Generates a random matrix of shape `rows` * `columns`.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} rows - Number of rows.
+   * @param {Number} columns - Number of columns.
+   * @param {String} type - Type of the random numerals.
+   * @returns {Matrix} - Random matrix.
+   * @throws {AssertionError} - Dimensions must be positive integers.
+   */
+  static random(rows, columns, type = "natural") {
+    const matrix = []
+
+    if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
+      throw new TypeError('Dimensions must be integers.')
+    } else if (rows <= 0 || columns <= 0) {
+      throw new AssertionError({ message: 'Dimensions must be positive integers.' })
+    }
+
+    for (let row = 0; row < rows; row++) {
+      matrix.push(Vector.random(columns, type))
+    }
+
+    return new Matrix(matrix)
   }
 }

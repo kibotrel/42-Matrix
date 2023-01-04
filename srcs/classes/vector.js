@@ -1,6 +1,8 @@
 import util from 'node:util'
+import { AssertionError } from 'node:assert'
 
 import { Numeral, Matrix } from '#classes'
+
 
 /**
  * This class represents a vector. Its value is an array of Numeral.
@@ -48,16 +50,17 @@ export class Vector {
   /**
    * Adds two vectors.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Vector} vector - Vector to add.
    * @returns {Vector} - Result of the addition.
-   * @throws {Error} - Vectors must be of the same size.
-   * @throws {Error} - Argument must be an instance of Vector.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @throws {TypeError} - Argument must be an instance of Vector.
    */
   add(vector) {
     if (!(vector instanceof Vector)) {
       throw new TypeError('Argument must be an instance of Vector.')
     } else if (this.size !== vector.size) {
-      throw new Error('Vectors must be of the same size.')
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
     const result = []
@@ -72,16 +75,17 @@ export class Vector {
   /**
    * Subtracts two vectors.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Vector} vector - Vector to subtract.
    * @returns {Vector} - Result of the subtraction.
-   * @throws {Error} - Vectors must be of the same size.
-   * @throws {Error} - Argument must be an instance of Vector.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @throws {TypeError} - Argument must be an instance of Vector.
    */
   subtract(vector) {
     if (!(vector instanceof Vector)) {
       throw new TypeError('Argument must be an instance of Vector.')
     } else if (this.size !== vector.size) {
-      throw new Error('Vectors must be of the same size.')
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
     const result = []
@@ -96,16 +100,17 @@ export class Vector {
   /**
    * Checks if two vectors are equal.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Vector} vector - Vector to compare.
    * @returns {boolean} - True if vectors are equal, false otherwise.
-   * @throws {Error} - Vectors must be of the same size.
-   * @throws {Error} - Argument must be an instance of Vector.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @throws {TypeError} - Argument must be an instance of Vector.
    */
   equals(vector) {
     if (!(vector instanceof Vector)) {
       throw new TypeError('Argument must be an instance of Vector.')
     } else if (this.size !== vector.size) {
-      throw new Error('Vectors must be of the same size.')
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
     for (let index = 0; index < this.size; index++) {
@@ -120,9 +125,10 @@ export class Vector {
   /**
    * Multiplies a vector by a scalar.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @param {Numeral} scalar - Numeral to scale with.
    * @returns {Vector} - Result of the scaling.
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   scale(scalar) {
     if (!(scalar instanceof Numeral)) {
@@ -142,12 +148,13 @@ export class Vector {
    * Computes the multiplication reduction of a vector.
    * This is equivalent to multiplying all the elements of the vector.
    *
+   * @description Space complexity: O(n), time complexity: O(n).
    * @returns {Numeral} - Result of the multiplication reduction.
-   * @throws {Error} - Vector must not be empty.
+   * @throws {AssertionError} - Vector must not be empty.
    */
   productReduce() {
     if (this.size === 0) {
-      throw new Error('Vector must not be empty.')
+      throw new AssertionError({ message: 'Vector must not be empty.' })
     }
 
     return this.vector.reduce(
@@ -159,36 +166,34 @@ export class Vector {
   /**
    * Converts a vector to a matrix.
    *
-   * @param {Vector} shape - Shape of the matrix.
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} rows - Number of rows.
+   * @param {Number} columns - Number of columns.
    * @returns {Matrix} - Matrix representation of the vector.
-   * @throws {Error} - Argument must be an instance of Vector.
+   * @throws {TypeError} - Dimensions of the target matrix must be integers.
+   * @throws {RangeError} - Dimensions of the target matrix must be positive integers.
+   * @throws {AssertionError} - The product of the target matrix dimensions must be equal to the size of the vector.
    */
-  toMatrix(shape) {
+  toMatrix(rows = 0, columns = 0) {
     if (this.size === 0) {
       return new Matrix()
     }
 
-    if (!(shape instanceof Vector)) {
-      throw new TypeError('Argument must be an instance of Vector.')
-    } else if (shape.size !== 2) {
-      throw new Error('Argument must be a 2D vector.')
-    } else if (shape.vector.some((numeral) => !numeral.isInteger())) {
-      throw new Error('Argument must be a 2D vector of integers.')
-    } else if (shape.vector.some((numeral) => numeral.r <= 0)) {
-      throw new Error('Argument must be a 2D vector of positive integers.')
-    } else if (!shape.productReduce().equals(new Numeral(this.size))) {
-      throw new Error(
-        'Argument must be a 2D vector of integers whose product is equal to the size of the vector.'
-      )
+    if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
+      throw new TypeError('Dimensions of the target matrix must be integers.')
+    } else if (rows <= 0 || columns <= 0) {
+      throw new RangeError('Dimensions of the target matrix must be positive integers.')
+    } else if (rows * columns !== this.size) {
+      throw new AssertionError({ message: 'The product of the target matrix dimensions must be equal to the size of the vector.' })
     }
 
     const matrix = []
 
-    for (let row = 0; row < shape.vector.at(0).r; row++) {
+    for (let row = 0; row < rows; row++) {
       const vector = []
 
-      for (let column = 0; column < shape.vector.at(1).r; column++) {
-        vector.push(this.vector[row * shape.vector.at(1).r + column])
+      for (let column = 0; column < columns; column++) {
+        vector.push(this.vector[row * columns + column])
       }
 
       matrix.push(new Vector(vector))
@@ -200,14 +205,17 @@ export class Vector {
   /**
    * Generates a random vector of size `size`.
    *
-   * @param {number} size - Size of the vector.
-   * @param {string} type - Type of the vector.
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} size - Size of the vector.
+   * @param {String} type - Type of random numerals.
    * @returns {Vector} - Random vector.
-   * @throws {Error} - Size must be a positive integer.
+   * @throws {TypeError} - Size must be an integer.
    */
   static random(size, type = 'natural') {
-    if (typeof size !== 'number' || size <= 0 || size % 1 !== 0) {
-      throw new TypeError('Size must be a positive integer.')
+    if (!Number.isInteger(size)) {
+      throw new TypeError('Size must be an integer.')
+    } else if (size <= 0) {
+      throw new AssertionError({ message: 'Size must be a positive integer.' })
     }
 
     const vector = []

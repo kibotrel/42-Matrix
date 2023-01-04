@@ -1,3 +1,5 @@
+import { AssertionError } from 'node:assert'
+
 import { expect } from 'chai'
 import util from 'util'
 
@@ -84,7 +86,7 @@ export default () => {
     it('Empty vector', () => {
       const vector = new Vector()
 
-      expect(vector.vector).to.be.an('array')
+      expect(vector.vector).to.be.an('array').that.is.empty
       expect(vector.vector).to.be.empty
       expect(vector.size).to.equal(0)
     })
@@ -130,7 +132,7 @@ export default () => {
     })
   })
 
-  describe('Extra methods', () => {
+  describe('Extra instance methods', () => {
     describe('Equals', () => {
       it('Empty vectors', () => {
         const vector1 = new Vector()
@@ -206,7 +208,7 @@ export default () => {
         const vector2 = new Vector([new Numeral(1), new Numeral(2)])
 
         expect(() => vector1.equals(vector2)).to.throw(
-          Error,
+          AssertionError,
           'Vectors must be of the same size.'
         )
       })
@@ -215,23 +217,23 @@ export default () => {
     describe('ToMatrix', () => {
       it('Empty vector', () => {
         const vector = new Vector()
-        const shape = new Vector([new Numeral(0), new Numeral(0)])
+        const shape = [0, 0]
         const matrix = vector.toMatrix(shape)
 
         expect(matrix.rows).to.equal(0)
         expect(matrix.columns).to.equal(0)
-        expect(matrix.shape.equals(shape)).to.be.true
+        expect(JSON.stringify(matrix.shape) === JSON.stringify(shape)).to.be.true
       })
 
       it('Vector with one element', () => {
         const vector = new Vector([new Numeral(1)])
-        const shape = new Vector([new Numeral(1), new Numeral(1)])
-        const matrix = vector.toMatrix(shape)
+        const shape = [1, 1]
+        const matrix = vector.toMatrix(1, 1)
         const result = new Matrix([new Vector([new Numeral(1)])])
 
         expect(matrix.rows).to.equal(1)
         expect(matrix.columns).to.equal(1)
-        expect(matrix.shape.equals(shape)).to.be.true
+        expect(JSON.stringify(matrix.shape) === JSON.stringify(shape)).to.be.true
         expect(matrix.equals(result)).to.be.true
       })
 
@@ -243,8 +245,8 @@ export default () => {
           new Numeral(4),
           new Numeral(5),
         ])
-        const shape = new Vector([new Numeral(1), new Numeral(5)])
-        const matrix = vector.toMatrix(shape)
+        const shape = [1, 5]
+        const matrix = vector.toMatrix(1, 5)
         const result = new Matrix([
           new Vector([
             new Numeral(1),
@@ -257,7 +259,7 @@ export default () => {
 
         expect(matrix.rows).to.equal(1)
         expect(matrix.columns).to.equal(5)
-        expect(matrix.shape.equals(shape)).to.be.true
+        expect(JSON.stringify(matrix.shape) === JSON.stringify(shape)).to.be.true
         expect(matrix.equals(result)).to.be.true
       })
 
@@ -269,8 +271,8 @@ export default () => {
           new Numeral(4),
           new Numeral(5),
         ])
-        const shape = new Vector([new Numeral(5), new Numeral(1)])
-        const matrix = vector.toMatrix(shape)
+        const shape = [5, 1]
+        const matrix = vector.toMatrix(5, 1)
         const result = new Matrix([
           new Vector([new Numeral(1)]),
           new Vector([new Numeral(2)]),
@@ -281,7 +283,7 @@ export default () => {
 
         expect(matrix.rows).to.equal(5)
         expect(matrix.columns).to.equal(1)
-        expect(matrix.shape.equals(shape)).to.be.true
+        expect(JSON.stringify(matrix.shape) === JSON.stringify(shape)).to.be.true
         expect(matrix.equals(result)).to.be.true
       })
 
@@ -294,8 +296,8 @@ export default () => {
           new Numeral(5),
           new Numeral(6),
         ])
-        const shape = new Vector([new Numeral(3), new Numeral(2)])
-        const matrix = vector.toMatrix(shape)
+        const shape = [3, 2]
+        const matrix = vector.toMatrix(3, 2)
         const result = new Matrix([
           new Vector([new Numeral(1), new Numeral(2)]),
           new Vector([new Numeral(3), new Numeral(4)]),
@@ -304,57 +306,105 @@ export default () => {
 
         expect(matrix.rows).to.equal(3)
         expect(matrix.columns).to.equal(2)
-        expect(matrix.shape.equals(shape)).to.be.true
+        expect(JSON.stringify(matrix.shape) === JSON.stringify(shape)).to.be.true
         expect(matrix.equals(result)).to.be.true
       })
 
-      it('Second operand must be a Vector instance', () => {
+      it('Matrix dimensions must be integers', () => {
         const vector = new Vector([new Numeral(1)])
-        const shape = new Numeral(2)
 
-        expect(() => vector.toMatrix(shape)).to.throw(
+        expect(() => vector.toMatrix(new Numeral(2), 1)).to.throw(
           TypeError,
-          'Argument must be an instance of Vector.'
+          'Dimensions of the target matrix must be integers.'
         )
       })
 
-      it('Second operand must be a 2D vector', () => {
+      it('Matrix dimensions must be positive integers', () => {
         const vector = new Vector([new Numeral(1)])
-        const shape = new Vector([new Numeral(1)])
 
-        expect(() => vector.toMatrix(shape)).to.throw(
-          Error,
-          'Argument must be a 2D vector.'
+        expect(() => vector.toMatrix(1, -2)).to.throw(
+          RangeError,
+          'Dimensions of the target matrix must be positive integers.'
         )
       })
 
-      it('Second operand must be a 2D vector of integers', () => {
+      it('Matrix dimensions product is equal to the size of the vector', () => {
         const vector = new Vector([new Numeral(1)])
-        const shape = new Vector([new Numeral(1), new Numeral(1.5)])
 
-        expect(() => vector.toMatrix(shape)).to.throw(
-          Error,
-          'Argument must be a 2D vector of integers.'
+        expect(() => vector.toMatrix(1, 3)).to.throw(
+          AssertionError,
+          'The product of the target matrix dimensions must be equal to the size of the vector.'
+        )
+      })
+    })
+
+    describe('ProductReduce', () => {
+      it('Vector with one element', () => {
+        const vector = new Vector([new Numeral(2)])
+        const result = vector.productReduce()
+
+        expect(result.equals(new Numeral(2))).to.be.true
+      })
+
+      it('Vector with many elements', () => {
+        const vector = new Vector([
+          new Numeral(2),
+          new Numeral(3),
+          new Numeral(4),
+          new Numeral(5),
+        ])
+        const result = vector.productReduce()
+
+        expect(result.equals(new Numeral(120))).to.be.true
+      })
+
+      it('Vector must not be empty', () => {
+        const vector = new Vector()
+
+        expect(() => vector.productReduce()).to.throw(
+          AssertionError,
+          'Vector must not be empty.'
+        )
+      })
+    })
+  })
+
+  describe('Extra static methods', () => {
+    describe('Random', () => {
+      it('No arguments', () => {
+        expect(() => Vector.random()).to.throw(
+          TypeError,
+          'Size must be an integer.'
         )
       })
 
-      it('Second operand must be a 2D vector of positive integers', () => {
-        const vector = new Vector([new Numeral(1)])
-        const shape = new Vector([new Numeral(1), new Numeral(-1)])
+      it('Vector with one element', () => {
+        const vector = Vector.random(1)
 
-        expect(() => vector.toMatrix(shape)).to.throw(
-          Error,
-          'Argument must be a 2D vector of positive integers.'
+        expect(vector.vector).to.be.an('array')
+        expect(vector.vector.length).to.equal(1)
+        expect(vector.size).to.equal(1)
+      })
+
+      it('Vector with many elements', () => {
+        const vector = Vector.random(5)
+
+        expect(vector.vector).to.be.an('array')
+        expect(vector.vector.length).to.equal(5)
+        expect(vector.size).to.equal(5)
+      })
+
+      it('Vector size must be an integer', () => {
+        expect(() => Vector.random(1.2)).to.throw(
+          TypeError,
+          'Size must be an integer.'
         )
       })
 
-      it('Second operand must be a 2D vector of integers whose product is equal to the size of the vector', () => {
-        const vector = new Vector([new Numeral(1)])
-        const shape = new Vector([new Numeral(2), new Numeral(2)])
-
-        expect(() => vector.toMatrix(shape)).to.throw(
-          Error,
-          'Argument must be a 2D vector of integers whose product is equal to the size of the vector.'
+      it('Vector size must be a positive integer', () => {
+        expect(() => Vector.random(-5)).to.throw(
+          AssertionError,
+          'Size must be a positive integer.'
         )
       })
     })

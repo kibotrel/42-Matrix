@@ -264,7 +264,7 @@ export default () => {
     })
   })
 
-  describe('Extra methods', () => {
+  describe('Extra instance methods', () => {
     describe('Equals', () => {
       it('Equal', () => {
         const numeral1 = new Numeral(1)
@@ -287,38 +287,6 @@ export default () => {
           TypeError,
           'Argument must be an instance of Numeral.'
         )
-      })
-    })
-
-    describe('Random', () => {
-      it('Default behaviour', () => {
-        const numeral = Numeral.random()
-
-        expect(numeral.r).to.be.a('number')
-        expect(Number.isInteger(numeral.r)).to.equal(true)
-        expect(numeral.i).to.be.a('number')
-        expect(numeral.i).to.equal(0)
-      })
-
-      it('Generate a random real number', () => {
-        const numeral = Numeral.random('real')
-
-        expect(numeral.r).to.be.a('number')
-        expect(Number.isInteger(numeral.r)).to.equal(false)
-        expect(numeral.i).to.equal(0)
-      })
-
-      it('Generate a random complex number', () => {
-        const numeral = Numeral.random('complex-decimal')
-
-        expect(numeral.r).to.be.a('number')
-        expect(Number.isInteger(numeral.r)).to.equal(false)
-        expect(numeral.i).to.be.a('number')
-        expect(Number.isInteger(numeral.i)).to.equal(false)
-      })
-
-      it('Invalid type of Numeral', () => {
-        expect(() => Numeral.random('1')).to.throw(Error, 'Invalid type.')
       })
     })
 
@@ -417,5 +385,40 @@ export default () => {
         expect(numeral.isComplex()).to.equal(true)
       })
     })
+  })
+
+  describe('Extra static methods', () => {
+    describe('Random', () => {
+      it('Default behaviour', () => {
+        const numeral = Numeral.random()
+
+        expect(numeral.r).to.be.a('number')
+        expect(Number.isInteger(numeral.r)).to.equal(true)
+        expect(numeral.i).to.be.a('number')
+        expect(numeral.i).to.equal(0)
+      })
+
+      it('Generate a random real number', () => {
+        const numeral = Numeral.random('real')
+
+        expect(numeral.r).to.be.a('number')
+        expect(Number.isInteger(numeral.r)).to.equal(false)
+        expect(numeral.i).to.equal(0)
+      })
+
+      it('Generate a random complex number', () => {
+        const numeral = Numeral.random('complex-decimal')
+
+        expect(numeral.r).to.be.a('number')
+        expect(Number.isInteger(numeral.r)).to.equal(false)
+        expect(numeral.i).to.be.a('number')
+        expect(Number.isInteger(numeral.i)).to.equal(false)
+      })
+
+      it('Invalid type of Numeral', () => {
+        expect(() => Numeral.random('1')).to.throw(Error, 'Invalid type.')
+      })
+    })
+
   })
 }

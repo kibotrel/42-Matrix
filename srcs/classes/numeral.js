@@ -7,9 +7,9 @@ import { fixDecimals } from '#utils'
 /**
  * This is a number container. You can store both real and complex numbers in it.
  *
- * @typedef {object} Numeral
- * @property {number} r - Real part of the number.
- * @property {number} i - Imaginary part of the number.
+ * @typedef {Object} Numeral
+ * @property {Number} r - Real part of the number.
+ * @property {Number} i - Imaginary part of the number.
  */
 
 /**
@@ -17,22 +17,22 @@ import { fixDecimals } from '#utils'
  */
 export class Numeral {
   /**
-   * @param {number} real - Real part of the number.
-   * @param {number} imaginary - Imaginary part of the number.
+   * @param {Number} real - Real part of the number.
+   * @param {Number} imaginary - Imaginary part of the number.
    */
   constructor(real = 0, imaginary = 0) {
     /**
      * Real part of the number.
      *
      * @readonly
-     * @type {number}
+     * @type {Number}
      */
     this.r = real
     /**
      * Imaginary part of the number.
      *
      * @readonly
-     * @type {number}
+     * @type {Number}
      */
     this.i = imaginary
   }
@@ -40,7 +40,7 @@ export class Numeral {
   /**
    * Returns a string representation of the number.
    *
-   * @returns {string} - String representation of the number.
+   * @returns {String} - String representation of the number.
    */
   [util.inspect.custom]() {
     const real = fixDecimals(this.r)
@@ -66,9 +66,10 @@ export class Numeral {
   /**
    * Adds two numerals.
    *
+   * @description Space complexity: O(1), Time complexity: O(1).
    * @param {Numeral} numeral - Numeral to add.
    * @returns {Numeral} - Result of the addition.
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   add(numeral) {
     if (!(numeral instanceof Numeral)) {
@@ -81,9 +82,10 @@ export class Numeral {
   /**
    * Subtracts two numerals.
    *
+   * @description Space complexity: O(1), Time complexity: O(1).
    * @param {Numeral} numeral - Numeral to subtract.
    * @returns {Numeral} - Result of the subtraction.
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   subtract(numeral) {
     if (!(numeral instanceof Numeral)) {
@@ -96,9 +98,10 @@ export class Numeral {
   /**
    * Multiplies two numerals.
    *
+   * @description Space complexity: O(1), Time complexity: O(1).
    * @param {Numeral} numeral - Numeral to multiply.
    * @returns {Numeral} - Result of the multiplication.
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   multiply(numeral) {
     if (!(numeral instanceof Numeral)) {
@@ -114,10 +117,11 @@ export class Numeral {
   /**
    * Checks if two numerals are equal.
    *
+   * @description Space complexity: O(1), Time complexity: O(1).
    * @param {Numeral} numeral - Numeral to compare.
-   * @returns {boolean} - True if the numerals are equal, false otherwise.
+   * @returns {Boolean} - True if the numerals are equal, false otherwise.
    * @static
-   * @throws {Error} - Argument must be an instance of Numeral.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
    */
   equals(numeral) {
     if (!(numeral instanceof Numeral)) {
@@ -130,7 +134,8 @@ export class Numeral {
   /**
    * Checks if the number is an integer.
    *
-   * @returns {boolean} - True if the number is an integer, false otherwise.
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Boolean} - True if the number is an integer, false otherwise.
    */
   isInteger() {
     return Number.isInteger(this.r) && this.i === 0
@@ -139,7 +144,8 @@ export class Numeral {
   /**
    * Checks if the number is real.
    *
-   * @returns {boolean} - True if the number is real, false otherwise.
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Boolean} - True if the number is real, false otherwise.
    */
   isReal() {
     return this.i === 0
@@ -148,7 +154,8 @@ export class Numeral {
   /**
    * Checks if the number is complex.
    *
-   * @returns {boolean} - True if the number is complex, false otherwise.
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Boolean} - True if the number is complex, false otherwise.
    */
   isComplex() {
     return this.i !== 0
@@ -157,10 +164,11 @@ export class Numeral {
   /**
    * Generates a random Numeral.
    *
-   * @param {string} type - Type of the Numeral.
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @param {String} type - Type of the Numeral.
    * @returns {Numeral} - Random Numeral.
    * @static
-   * @throws {Error} - Invalid type.
+   * @throws {RangeError} - Invalid type.
    */
   static random(type = 'natural') {
     const signReal = Math.random() < 0.5 ? -1 : 1
@@ -192,7 +200,7 @@ export class Numeral {
         )
       }
       default: {
-        throw new Error('Invalid type.')
+        throw new RangeError('Invalid type.')
       }
     }
   }
