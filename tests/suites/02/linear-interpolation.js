@@ -280,6 +280,13 @@ export default () => {
           'Interpolation factor must be between 0 and 1.'
         )
       })
+
+      it('Vectors must be of the same size', () => {
+        expect(() => Vector.lerp(new Vector(), new Vector(new Numeral(1)), new Numeral(1))).to.throw(
+          AssertionError,
+          'Vectors must be of the same size.'
+        )
+      })
     })
 
     describe('Matrix', () => {
@@ -308,6 +315,13 @@ export default () => {
         expect(() => Matrix.lerp(new Matrix(), new Matrix(), new Numeral(2))).to.throw(
           RangeError,
           'Interpolation factor must be between 0 and 1.'
+        )
+      })
+
+      it('Matrices must be of the same shape', () => {
+        expect(() => Matrix.lerp(new Matrix(), new Matrix([new Vector([new Numeral()])]), new Numeral(1))).to.throw(
+          AssertionError,
+          'Matrices must be of the same shape.'
         )
       })
     })

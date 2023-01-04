@@ -272,6 +272,7 @@ export class Vector {
    * @throws {TypeError} - Interpolation factor must be an instance of Numeral.
    * @throws {RangeError} - Interpolation factor must be between 0 and 1.
    * @throws {TypeError} - Interpolation factor must be real.
+   * @throws {AssertionError} - Vectors must be of the same size.
    */
   static lerp(a, b, t) {
     if (!(a instanceof Vector) || !(b instanceof Vector)) {
@@ -282,6 +283,8 @@ export class Vector {
       throw new TypeError('Interpolation factor must be real.')
     } else if (t.r < 0 || t.r > 1) {
       throw new RangeError('Interpolation factor must be between 0 and 1.')
+    } else if (a.size !== b.size) {
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
     return a.add(b.subtract(a).scale(t))
