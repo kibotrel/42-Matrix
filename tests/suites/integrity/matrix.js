@@ -65,6 +65,13 @@ export default () => {
       expect(matrix.scale).to.be.a('function')
     })
 
+    it('Equals', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('equals')
+      expect(matrix.equals).to.be.a('function')
+    })
+
     it('isSquare', () => {
       const matrix = new Matrix()
 
