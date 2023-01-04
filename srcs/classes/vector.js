@@ -210,6 +210,7 @@ export class Vector {
    * @description Space complexity: O(n), time complexity: O(n).
    * @param {Number} size - Size of the vector.
    * @param {String} type - Type of random numerals.
+   * @static
    * @returns {Vector} - Random vector.
    * @throws {TypeError} - Size must be an integer.
    */
@@ -238,6 +239,7 @@ export class Vector {
    * @param {Number} size - Size of the vector.
    * @param {Numeral} value - Value to fill the vector with.
    * @returns {Vector} - Vector filled with `value`.
+   * @static
    * @throws {TypeError} - Size must be an integer.
    * @throws {AssertionError} - Size must be a positive integer.
    */
@@ -255,5 +257,33 @@ export class Vector {
     }
 
     return new Vector(vector)
+  }
+
+  /**
+   * Creates a linear interpolation between two vectors.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Vector} a - First vector.
+   * @param {Vector} b - Second vector.
+   * @param {Numeral} t - Interpolation factor.
+   * @returns {Vector} - Interpolated vector.
+   * @static
+   * @throws {TypeError} - Arguments must be instances of Vector.
+   * @throws {TypeError} - Interpolation factor must be an instance of Numeral.
+   * @throws {RangeError} - Interpolation factor must be between 0 and 1.
+   * @throws {TypeError} - Interpolation factor must be real.
+   */
+  static lerp(a, b, t) {
+    if (!(a instanceof Vector) || !(b instanceof Vector)) {
+      throw new TypeError('Arguments must be instances of Vector.')
+    } else if (!(t instanceof Numeral)) {
+      throw new TypeError('Interpolation factor must be an instance of Numeral.')
+    } else if (!t.isReal()) {
+      throw new TypeError('Interpolation factor must be real.')
+    } else if (t.r < 0 || t.r > 1) {
+      throw new RangeError('Interpolation factor must be between 0 and 1.')
+    }
+
+    return a.add(b.subtract(a).scale(t))
   }
 }

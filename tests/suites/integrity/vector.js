@@ -85,6 +85,11 @@ export default () => {
       expect(Vector).to.have.property('initialize')
       expect(Vector.initialize).to.be.a('function')
     })
+
+    it('Lerp', () => {
+      expect(Vector).to.have.property('lerp')
+      expect(Vector.lerp).to.be.a('function')
+    })
   })
 
   describe('Values', () => {

@@ -8,3 +8,5 @@ sonarjs
 srcs
 stylelint
 stylelintcache
+lerp
+Lerp

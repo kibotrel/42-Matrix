@@ -206,4 +206,29 @@ export class Numeral {
       }
     }
   }
+
+  /**
+   * Creates a linear interpolation between two numerals.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @param {Numeral} a - First numeral.
+   * @param {Numeral} b - Second numeral.
+   * @param {Numeral} t - Interpolation factor.
+   * @returns {Numeral} - Interpolated numeral.
+   * @static
+   * @throws {TypeError} - Arguments must be instances of Numeral.
+   * @throws {RangeError} - Interpolation factor must be between 0 and 1.
+   * @throws {TypeError} - Interpolation factor must be real.
+   */
+  static lerp(a, b, t) {
+    if (!(a instanceof Numeral) || !(b instanceof Numeral) || !(t instanceof Numeral)) {
+      throw new TypeError('Arguments must be instances of Numeral.')
+    } else if (!t.isReal()) {
+      throw new TypeError('Interpolation factor must be real.')
+    } else if (t.r < 0 || t.r > 1) {
+      throw new RangeError('Interpolation factor must be between 0 and 1.')
+    }
+
+    return a.add(b.subtract(a).multiply(t))
+  }
 }

@@ -200,6 +200,7 @@ export class Matrix {
    * @param {Number} rows - Number of rows.
    * @param {Number} columns - Number of columns.
    * @param {String} type - Type of the random numerals.
+   * @static
    * @returns {Matrix} - Random matrix.
    * @throws {AssertionError} - Dimensions must be positive integers.
    */
@@ -226,6 +227,7 @@ export class Matrix {
    * @param {Matrix} matrix - Matrix to compute the linear combination of.
    * @param {Vector} vector - Each element of this vector is used to scale its corresponding row index within the matrix.
    * @returns {Vector} - Result of the linear combination.
+   * @static
    * @throws {AssertionError} - Matrix rows and vector size must be equal.
    * @throws {TypeError} - First argument must be an instance of Matrix, second argument must be an instance of Vector.
    */
@@ -242,5 +244,33 @@ export class Matrix {
     return matrixRows.reduce((result, row, index) => {
       return result.add(row.scale(scaleVector[index]))
     }, Vector.initialize(matrix.columns))
+  }
+
+  /**
+   * Creates a linear interpolation between two matrices.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Matrix} a - First matrix.
+   * @param {Matrix} b - Second matrix.
+   * @param {Numeral} t - Interpolation factor.
+   * @returns {Matrix} - Interpolated matrix.
+   * @static
+   * @throws {TypeError} - Arguments must be instances of Matrix.
+   * @throws {TypeError} - Interpolation factor must be an instance of Numeral.
+   * @throws {RangeError} - Interpolation factor must be between 0 and 1.
+   * @throws {TypeError} - Interpolation factor must be real.
+   */
+  static lerp(a, b, t) {
+    if (!(a instanceof Matrix) || !(b instanceof Matrix)) {
+      throw new TypeError('Arguments must be instances of Matrix.')
+    } else if (!(t instanceof Numeral)) {
+      throw new TypeError('Interpolation factor must be an instance of Numeral.')
+    } else if (!t.isReal()) {
+      throw new TypeError('Interpolation factor must be real.')
+    } else if (t.r < 0 || t.r > 1) {
+      throw new RangeError('Interpolation factor must be between 0 and 1.')
+    }
+
+    return a.add(b.subtract(a).scale(t))
   }
 }

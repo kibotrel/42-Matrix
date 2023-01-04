@@ -98,6 +98,11 @@ export default () => {
       expect(Matrix).to.have.property('linearCombination')
       expect(Matrix.linearCombination).to.be.a('function')
     })
+
+    it('lerp', () => {
+      expect(Matrix).to.have.property('lerp')
+      expect(Matrix.linearCombination).to.be.a('function')
+    })
   })
 
 
