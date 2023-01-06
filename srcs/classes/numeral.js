@@ -51,7 +51,7 @@ export class Numeral {
       return chalk.yellow(`${real}`)
     } else if (real === 0) {
       return chalk.yellow(
-        `${imaginary !== 1 && imaginary !== -1 ? imaginary : ''}i`
+        `${imaginary !== 1 && imaginary !== -1 ? imaginary : imaginary === -1 ? '-' : ''}i`
       )
     } else if (imaginary < 0) {
       return chalk.yellow(
@@ -232,7 +232,7 @@ export class Numeral {
    * @throws {RangeError} - Interpolation factor must be between 0 and 1.
    * @throws {TypeError} - Interpolation factor must be real.
    */
-  static lerp(a, b, t) {
+  static linearInterpolation(a, b, t) {
     if (!(a instanceof Numeral) || !(b instanceof Numeral) || !(t instanceof Numeral)) {
       throw new TypeError('Arguments must be instances of Numeral.')
     } else if (!t.isReal()) {
