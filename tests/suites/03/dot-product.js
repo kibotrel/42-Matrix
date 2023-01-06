@@ -30,15 +30,15 @@ export default () => {
       expect(v1.dotProduct(v2).equals(expected)).to.be.true
     })
 
-    it('[0, 1 + 2i] · [0, 2 + i] = 4', () => {
-      const v1 = new Vector([new Numeral(0), new Numeral(1, 2)])
-      const v2 = new Vector([new Numeral(0), new Numeral(2, 1)])
-      const expected = new Numeral(4)
+    it('[2 + i, 0, 4 - 5i] · [1 + i, 2 + i, 0] = 3 - i', () => {
+      const v1 = new Vector([new Numeral(2, 1), new Numeral(0), new Numeral(4, -5)])
+      const v2 = new Vector([new Numeral(1, 1), new Numeral(2, 1), new Numeral(0)])
+      const expected = new Numeral(3, -1)
 
       expect(v1.dotProduct(v2).equals(expected)).to.be.true
     })
 
-    it('[2 + i, 2.5, 4 - 5.5i] · [1 + i, 2.125 + i, 0] = 8.3125', () => {
+    it('[2 + i, 2.5, 4 - 5.5i] · [1 + i, 2.125 + i, 0] = 8.3125 - 3.5i', () => {
       const v1 = new Vector([
         new Numeral(2, 1),
         new Numeral(2.5),
@@ -49,7 +49,8 @@ export default () => {
         new Numeral(2.125, 1),
         new Numeral(0),
       ])
-      const expected = new Numeral(8.3125)
+      const expected = new Numeral(8.3125, -3.5)
+
       expect(v1.dotProduct(v2).equals(expected)).to.be.true
     })
   })
