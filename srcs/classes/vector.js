@@ -376,4 +376,43 @@ export class Vector {
 
     return a.add(b.subtract(a).scale(t))
   }
+
+  /**
+   * Computes the cosine of the angle between two vectors.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Vector} a - First vector.
+   * @param {Vector} b - Second vector.
+   * @returns {Numeral} - Cosine of the angle between the two vectors.
+   * @static
+   * @throws {TypeError} - Arguments must be instances of Vector.
+   * @throws {AssertionError} - Vectors must be of at least size 2.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @throws {AssertionError} - Vectors must not be zero vectors.
+   * @see https://onlinemschool.com/math/library/vector/angl/
+   * @see https://towardsdatascience.com/understanding-cosine-similarity-and-its-application-fd42f585296a
+   * @see https://www.researchgate.net/post/How_can_I_calculate_the_angle_between_two_complex_vectors
+   */
+  static cosine(a, b) {
+    if (!(a instanceof Vector) || !(b instanceof Vector)) {
+      throw new TypeError('Arguments must be instances of Vector.')
+    } else if (a.size !== b.size) {
+      throw new AssertionError({
+        message: 'Vectors must be of the same size.'
+      })
+    } else if (a.size < 2 || b.size < 2) {
+      throw new AssertionError({
+        message: 'Vectors must be of at least size 2.'
+      })
+    } else if (
+      a.vector.every((numeral) => numeral.isZero()) ||
+      b.vector.every((numeral) => numeral.isZero())
+    ) {
+      throw new AssertionError({
+        message: 'Vectors must not be zero vectors.'
+      })
+    }
+
+    return a.dotProduct(b).divide(a.euclideanNorm().multiply(b.euclideanNorm()))
+  }
 }
