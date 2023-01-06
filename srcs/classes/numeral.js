@@ -197,6 +197,16 @@ export class Numeral {
   }
 
   /**
+   * Checks if the number is zero.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Boolean} - True if the number is zero, false otherwise.
+   */
+  isZero() {
+    return this.r === 0 && this.i === 0
+  }
+
+  /**
    * Computes the conjugate of the complex number.
    * The conjugate of a complex number is the number with the same real part
    * and an imaginary part equal in magnitude but opposite in sign.

@@ -113,6 +113,13 @@ export default () => {
       expect(numeral).to.have.property('squareRoot')
       expect(numeral.squareRoot).to.be.a('function')
     })
+
+    it('IsZero', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('isZero')
+      expect(numeral.isZero).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -606,6 +613,20 @@ export default () => {
         const expected = new Numeral(1, -2)
 
         expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+    })
+
+    describe('IsZero', () => {
+      it('Zero', () => {
+        const numeral = new Numeral(0)
+
+        expect(numeral.isZero()).to.be.true
+      })
+
+      it('Non-zero', () => {
+        const numeral = new Numeral(1)
+
+        expect(numeral.isZero()).to.be.false
       })
     })
   })
