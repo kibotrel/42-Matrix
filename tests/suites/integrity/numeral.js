@@ -92,6 +92,27 @@ export default () => {
       expect(numeral).to.have.property('conjugate')
       expect(numeral.conjugate).to.be.a('function')
     })
+
+    it('Divide', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('divide')
+      expect(numeral.divide).to.be.a('function')
+    })
+
+    it('Absolute', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('absolute')
+      expect(numeral.absolute).to.be.a('function')
+    })
+
+    it('SquareRoot', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('squareRoot')
+      expect(numeral.squareRoot).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -427,6 +448,164 @@ export default () => {
         const numeral = new Numeral(1, 1)
 
         expect(numeral.conjugate().equals(new Numeral(1, -1))).to.be.true
+      })
+    })
+
+    describe('Absolute', () => {
+      it('Zero', () => {
+        const numeral = new Numeral(0)
+        const expected = new Numeral(0)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Positive integer', () => {
+        const numeral = new Numeral(1)
+        const expected = new Numeral(1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Negative integer', () => {
+        const numeral = new Numeral(-1)
+        const expected = new Numeral(1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Positive real', () => {
+        const numeral = new Numeral(1.1)
+        const expected = new Numeral(1.1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Negative real', () => {
+        const numeral = new Numeral(-1.1)
+        const expected = new Numeral(1.1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Positive imaginary', () => {
+        const numeral = new Numeral(0, 1)
+        const expected = new Numeral(1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Negative imaginary', () => {
+        const numeral = new Numeral(0, -1)
+        const expected = new Numeral(1)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Complex with positive real and imaginary parts', () => {
+        const numeral = new Numeral(3, 4)
+        const expected = new Numeral(5)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative real part', () => {
+        const numeral = new Numeral(-3, 4)
+        const expected = new Numeral(5)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative imaginary part', () => {
+        const numeral = new Numeral(3, -4)
+        const expected = new Numeral(5)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative real and imaginary parts', () => {
+        const numeral = new Numeral(-3, -4)
+        const expected = new Numeral(5)
+
+        expect(numeral.absolute().equals(expected)).to.be.true
+      })
+    })
+
+    describe('SquareRoot', () => {
+      it('Zero', () => {
+        const numeral = new Numeral(0)
+        const expected = new Numeral(0)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Positive integer', () => {
+        const numeral = new Numeral(4)
+        const expected = new Numeral(2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Negative integer', () => {
+        const numeral = new Numeral(-4)
+        const expected = new Numeral(0, 2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Positive real', () => {
+        const numeral = new Numeral(2.25)
+        const expected = new Numeral(1.5)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Negative real', () => {
+        const numeral = new Numeral(-2.25)
+        const expected = new Numeral(0, 1.5)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Positive imaginary', () => {
+        const numeral = new Numeral(0, 8)
+        const expected = new Numeral(2, 2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Negative imaginary', () => {
+        const numeral = new Numeral(0, -8)
+        const expected = new Numeral(2, -2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Complex with positive real and imaginary parts', () => {
+        const numeral = new Numeral(3, 4)
+        const expected = new Numeral(2, 1)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative real part', () => {
+        const numeral = new Numeral(-3, 4)
+        const expected = new Numeral(1, 2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative imaginary part', () => {
+        const numeral = new Numeral(3, -4)
+        const expected = new Numeral(2, -1)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
+      })
+
+      it('Complex with negative real and imaginary parts', () => {
+        const numeral = new Numeral(-3, -4)
+        const expected = new Numeral(1, -2)
+
+        expect(numeral.squareRoot().equals(expected)).to.be.true
       })
     })
   })

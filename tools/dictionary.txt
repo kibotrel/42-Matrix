@@ -10,3 +10,4 @@ stylelint
 stylelintcache
 linearInterpolation
 linearInterpolation
+supremum

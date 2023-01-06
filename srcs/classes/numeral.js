@@ -5,7 +5,8 @@ import chalk from 'chalk'
 import { fixDecimals } from '#utils'
 
 /**
- * This is a number container. You can store both real and complex numbers in it.
+ * This is a number container. You can store both real 
+ * and complex numbers in it.
  *
  * @typedef {Object} Numeral
  * @property {Number} r - Real part of the number.
@@ -13,7 +14,8 @@ import { fixDecimals } from '#utils'
  */
 
 /**
- * This class in a number container. You can store both real and complex numbers in it.
+ * This class in a number container. You can store both real
+ * and complex numbers in it.
  */
 export class Numeral {
   /**
@@ -41,6 +43,7 @@ export class Numeral {
    * Returns a string representation of the number.
    *
    * @returns {String} - String representation of the number.
+   * @see https://nodejs.org/api/util.html#util_custom_inspection_functions_on_objects
    */
   [util.inspect.custom]() {
     /* c8 ignore start */
@@ -51,7 +54,8 @@ export class Numeral {
       return chalk.yellow(`${real}`)
     } else if (real === 0) {
       return chalk.yellow(
-        `${imaginary !== 1 && imaginary !== -1 ? imaginary : imaginary === -1 ? '-' : ''}i`
+        `${imaginary !== 1 && imaginary !== -1 ?
+          imaginary : imaginary === -1 ? '-' : ''}i`
       )
     } else if (imaginary < 0) {
       return chalk.yellow(
@@ -117,20 +121,49 @@ export class Numeral {
   }
 
   /**
+   * Divides two numerals.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @param {Numeral} numeral - Numeral to divide.
+   * @returns {Numeral} - Result of the division.
+   * @throws {TypeError} - Argument must be an instance of Numeral.
+   * @throws {RangeError} - Cannot divide by zero.
+   */
+  divide(numeral) {
+    if (!(numeral instanceof Numeral)) {
+      throw new TypeError('Argument must be an instance of Numeral.')
+    } else if (numeral.r === 0 && numeral.i === 0) {
+      throw new RangeError('Cannot divide by zero.')
+    }
+
+    const denominator = numeral.r * numeral.r + numeral.i * numeral.i
+    const real = (this.r * numeral.r + this.i * numeral.i) / denominator
+    const imaginary = (this.i * numeral.r - this.r * numeral.i) / denominator
+
+    return new Numeral(real, imaginary)
+  }
+
+  /**
    * Checks if two numerals are equal.
    *
    * @description Space complexity: O(1), Time complexity: O(1).
    * @param {Numeral} numeral - Numeral to compare.
+   * @param {Number} precision - Decimal precision of the comparison.
    * @returns {Boolean} - True if the numerals are equal, false otherwise.
    * @static
    * @throws {TypeError} - Argument must be an instance of Numeral.
    */
-  equals(numeral) {
+  equals(numeral, precision = 12) {
     if (!(numeral instanceof Numeral)) {
       throw new TypeError('Argument must be an instance of Numeral.')
     }
 
-    return this.r === numeral.r && this.i === numeral.i
+    const r1 = fixDecimals(this.r, precision)
+    const i1 = fixDecimals(this.i, precision)
+    const r2 = fixDecimals(numeral.r, precision)
+    const i2 = fixDecimals(numeral.i, precision)
+
+    return r1 === r2 && i1 === i2
   }
 
   /**
@@ -170,9 +203,86 @@ export class Numeral {
    * 
    * @description Space complexity: O(1), Time complexity: O(1).
    * @returns {Numeral} - Conjugate of the complex number.
+   * @see https://en.wikipedia.org/wiki/Complex_conjugate
    */
   conjugate() {
     return new Numeral(this.r, -this.i)
+  }
+
+  /**
+   * Computes the absolute value of the numeral.
+   * The absolute value of a complex number is the distance from the origin
+   * to the point on the complex plane corresponding to the complex number.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Numeral} - Absolute value of the numeral.
+   * @see https://www2.clarku.edu/faculty/djoyce/complex/abs.html#:~:text=For%20a%20complex%20number%20z,on%20the%20real%20number%20line.
+   */
+  absolute() {
+    return new Numeral(this.r * this.r + this.i * this.i).squareRoot()
+  }
+
+  /**
+   * Computes the square root of the numeral.
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Numeral} - Square root of the numeral.
+   * @see https://en.wikipedia.org/wiki/Methods_of_computing_square_roots#Babylonian_method
+   * @see https://www.cuemath.com/algebra/square-root-of-complex-number/
+   */
+  squareRoot() {
+    if (this.i === 0) {
+      if (this.r === 0) {
+        return new Numeral(0)
+      }
+
+      const sign = this.r < 0 ? -1 : 1
+      const x = sign < 0 ? -this.r : this.r
+      let y = 1
+
+      /**
+       * By definition square root must be greater than the one of the last
+       * integer and lesser than the following one so we compute the nearest
+       * perfect root of x to speed up the process.
+       */
+
+      while (y * y <= x) {
+        y++
+      }
+
+      /**
+       * Following the Babylonian algorithm iterate the following equation to
+       * get closer and closer to the actual root of x: y = 0.5 * (y + x / y)
+       * starting with y as the closest perfect root.
+       */
+
+      for (let i = 0; i < 10; i++) {
+        y = 0.5 * (y + x / y)
+      }
+
+      /**
+       * If the input number is negative we return the result as the imaginary 
+       * part of a complex number. 
+       */
+
+      return sign > 0 ? new Numeral(y) : new Numeral(0, y)
+    } else {
+      const { r: real } = this.absolute()
+        .add(new Numeral(this.r))
+        .divide(new Numeral(2))
+        .squareRoot()
+
+      const { r: imaginary } = new Numeral(this.i)
+        .divide(new Numeral(this.i).absolute())
+        .multiply(
+          this.absolute()
+            .subtract(
+              new Numeral(this.r))
+            .divide(new Numeral(2))
+            .squareRoot())
+
+      return new Numeral(real, imaginary)
+    }
   }
 
   /**
@@ -231,9 +341,14 @@ export class Numeral {
    * @throws {TypeError} - Arguments must be instances of Numeral.
    * @throws {RangeError} - Interpolation factor must be between 0 and 1.
    * @throws {TypeError} - Interpolation factor must be real.
+   * @see https://en.wikipedia.org/wiki/Linear_interpolation
    */
   static linearInterpolation(a, b, t) {
-    if (!(a instanceof Numeral) || !(b instanceof Numeral) || !(t instanceof Numeral)) {
+    if (
+      !(a instanceof Numeral) ||
+      !(b instanceof Numeral) ||
+      !(t instanceof Numeral)
+    ) {
       throw new TypeError('Arguments must be instances of Numeral.')
     } else if (!t.isReal()) {
       throw new TypeError('Interpolation factor must be real.')

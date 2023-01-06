@@ -100,7 +100,9 @@ export class Matrix {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
     } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
-      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
+      throw new AssertionError({
+        message: 'Matrices must be of the same shape.'
+      })
     }
 
     const result = this.matrix.map((vector, index) =>
@@ -123,7 +125,9 @@ export class Matrix {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
     } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
-      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
+      throw new AssertionError({
+        message: 'Matrices must be of the same shape.'
+      })
     }
 
     const result = this.matrix.map((vector, index) =>
@@ -147,7 +151,9 @@ export class Matrix {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
     } else if (JSON.stringify(matrix.shape) !== JSON.stringify(this.shape)) {
-      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
+      throw new AssertionError({
+        message: 'Matrices must be of the same shape.'
+      })
     }
 
     return this.matrix.every((vector, index) =>
@@ -210,7 +216,9 @@ export class Matrix {
     if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
       throw new TypeError('Dimensions must be integers.')
     } else if (rows <= 0 || columns <= 0) {
-      throw new AssertionError({ message: 'Dimensions must be positive integers.' })
+      throw new AssertionError({
+        message: 'Dimensions must be positive integers.'
+      })
     }
 
     for (let row = 0; row < rows; row++) {
@@ -265,13 +273,17 @@ export class Matrix {
     if (!(a instanceof Matrix) || !(b instanceof Matrix)) {
       throw new TypeError('Arguments must be instances of Matrix.')
     } else if (!(t instanceof Numeral)) {
-      throw new TypeError('Interpolation factor must be an instance of Numeral.')
+      throw new TypeError(
+        'Interpolation factor must be an instance of Numeral.'
+      )
     } else if (!t.isReal()) {
       throw new TypeError('Interpolation factor must be real.')
     } else if (t.r < 0 || t.r > 1) {
       throw new RangeError('Interpolation factor must be between 0 and 1.')
     } else if (JSON.stringify(a.shape) !== JSON.stringify(b.shape)) {
-      throw new AssertionError({ message: 'Matrices must be of the same shape.' })
+      throw new AssertionError({
+        message: 'Matrices must be of the same shape.'
+      })
     }
 
     return a.add(b.subtract(a).scale(t))

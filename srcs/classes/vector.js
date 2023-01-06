@@ -40,6 +40,7 @@ export class Vector {
    * Returns a string representation of the vector.
    *
    * @returns {string} - String representation of the vector.
+   * @see https://nodejs.org/api/util.html#util_custom_inspection_functions_on_objects|util.inspect.custom
    */
   [util.inspect.custom]() {
     /* c8 ignore start */
@@ -184,9 +185,13 @@ export class Vector {
     if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
       throw new TypeError('Dimensions of the target matrix must be integers.')
     } else if (rows <= 0 || columns <= 0) {
-      throw new RangeError('Dimensions of the target matrix must be positive integers.')
+      throw new RangeError(
+        'Dimensions of the target matrix must be positive integers.'
+      )
     } else if (rows * columns !== this.size) {
-      throw new AssertionError({ message: 'The product of the target matrix dimensions must be equal to the size of the vector.' })
+      throw new AssertionError({
+        message: 'The product of the target matrix dimensions must be equal to the size of the vector.'
+      })
     }
 
     const matrix = []
@@ -206,7 +211,8 @@ export class Vector {
 
   /**
    * Computes the dot product of two vectors.
-   * This is equivalent to multiplying the two vectors and then summing the result.
+   * This is equivalent to multiplying the two vectors and then summing
+   * the result.
    * 
    * @description Space complexity: O(n), time complexity: O(n).
    * @param {Vector} vector - Vector to compute the dot product with.
@@ -214,7 +220,7 @@ export class Vector {
    * @throws {AssertionError} - Vectors must be of the same size.
    * @throws {TypeError} - Argument must be an instance of Vector.
    * @throws {AssertionError} - Vector must not be empty.
-   *
+   * @see https://college.cengage.com/mathematics/larson/elementary_linear/4e/shared/downloads/c08s4.pdf
    */
   dotProduct(vector) {
     if (!(vector instanceof Vector)) {
@@ -225,13 +231,61 @@ export class Vector {
       throw new AssertionError({ message: 'Vectors must not be empty.' })
     }
 
-    // We're potentially dealing with complex numbers. To successfully compute the dot product, we need to conjugate the
-    // second each term of the second vector and use the inner product. Then, we can compute the real part of the result
-    // to get the dot product. More details: https://college.cengage.com/mathematics/larson/elementary_linear/4e/shared/downloads/c08s4.pdf
-
     return this.vector.reduce(
-      (result, value, index) =>
-        result.add(value.multiply(vector.vector[index].conjugate())), new Numeral(0))
+      (result, numeral, index) =>
+        result.add(numeral.multiply(vector.vector[index].conjugate())),
+      new Numeral(0)
+    )
+  }
+
+  /**
+   * Computes the Manhattan distance of a vector.
+   * This is equivalent to summing the absolute values of the vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @returns {Numeral} - Result of the Manhattan distance.
+   * @see https://montjoile.medium.com/l0-norm-l1-norm-l2-norm-l-infinity-norm-7a7d18a4f40c
+   */
+  manhattanDistance() {
+    return this.vector.reduce(
+      (result, numeral) => result.add(numeral.absolute()),
+      new Numeral(0)
+    )
+  }
+
+  /**
+   * Computes the Euclidean norm of a vector.
+   * This is equivalent to the square root of the sum of the squares of the
+   * vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @returns {Numeral} - Result of the Euclidean norm.
+   * @see https://montjoile.medium.com/l0-norm-l1-norm-l2-norm-l-infinity-norm-7a7d18a4f40c
+   */
+  euclideanNorm() {
+    return this.vector.reduce(
+      (result, numeral) => result.add(numeral.multiply(numeral)),
+      new Numeral(0)
+    ).squareRoot()
+  }
+
+  /**
+   * Computes the supremum norm of a vector.
+   * This is equivalent to the maximum absolute value of the vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @returns {Numeral} - Result of the supremum norm.
+   * @see https://montjoile.medium.com/l0-norm-l1-norm-l2-norm-l-infinity-norm-7a7d18a4f40c
+   */
+  supremumNorm() {
+    return this.vector.reduce(
+      (result, numeral) => {
+        const absolute = numeral.absolute()
+
+        return absolute.r > result.r ? absolute : result
+      },
+      new Numeral(0)
+    )
   }
 
   /**
@@ -263,7 +317,8 @@ export class Vector {
   /**
    * Generates a vector of size `size` with all elements equal to `value`.
    * If `value` is not provided, the vector will be filled with zeroes.
-   * If `value` is a number, the vector will be filled with numerals of that value.
+   * If `value` is a number, the vector will be filled with numerals of
+   * that value.
    * 
    * @description Space complexity: O(n), time complexity: O(n).
    * @param {Number} size - Size of the vector.
@@ -308,7 +363,9 @@ export class Vector {
     if (!(a instanceof Vector) || !(b instanceof Vector)) {
       throw new TypeError('Arguments must be instances of Vector.')
     } else if (!(t instanceof Numeral)) {
-      throw new TypeError('Interpolation factor must be an instance of Numeral.')
+      throw new TypeError(
+        'Interpolation factor must be an instance of Numeral.'
+      )
     } else if (!t.isReal()) {
       throw new TypeError('Interpolation factor must be real.')
     } else if (t.r < 0 || t.r > 1) {

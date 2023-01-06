@@ -73,6 +73,34 @@ export default () => {
       expect(vector).to.have.property('toMatrix')
       expect(vector.toMatrix).to.be.a('function')
     })
+
+    it('DotProduct', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('dotProduct')
+      expect(vector.dotProduct).to.be.a('function')
+    })
+
+    it('ManhattanDistance', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('manhattanDistance')
+      expect(vector.manhattanDistance).to.be.a('function')
+    })
+
+    it('EuclideanNorm', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('euclideanNorm')
+      expect(vector.euclideanNorm).to.be.a('function')
+    })
+
+    it('supremumNorm', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('supremumNorm')
+      expect(vector.supremumNorm).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
