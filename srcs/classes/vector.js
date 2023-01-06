@@ -415,4 +415,49 @@ export class Vector {
 
     return a.dotProduct(b).divide(a.euclideanNorm().multiply(b.euclideanNorm()))
   }
+
+  /**
+   * Computes the cross product of two vectors.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Vector} a - First vector.
+   * @param {Vector} b - Second vector.
+   * @returns {Vector} - Cross product of the two vectors.
+   * @static
+   * @throws {TypeError} - Arguments must be instances of Vector.
+   * @throws {AssertionError} - Vectors must be of size 3.
+   * @throws {AssertionError} - Vectors must be of the same size.
+   * @see https://www.mathsisfun.com/algebra/vectors-cross-product.html
+   */
+  static crossProduct(a, b) {
+    if (!(a instanceof Vector) || !(b instanceof Vector)) {
+      throw new TypeError('Arguments must be instances of Vector.')
+    } else if (a.size !== b.size) {
+      throw new AssertionError({
+        message: 'Vectors must be of the same size.'
+      })
+    } else if (a.size !== 3 || b.size !== 3) {
+      throw new AssertionError({
+        message: 'Vectors must be of size 3.'
+      })
+    }
+
+    const x = a.vector.at(1)
+      .multiply(b.vector.at(2))
+      .subtract(
+        a.vector.at(2).multiply(b.vector.at(1))
+      )
+    const y = a.vector.at(2)
+      .multiply(b.vector.at(0))
+      .subtract(
+        a.vector.at(0).multiply(b.vector.at(2))
+      )
+    const z = a.vector.at(0)
+      .multiply(b.vector.at(1))
+      .subtract(
+        a.vector.at(1).multiply(b.vector.at(0))
+      )
+
+    return new Vector([x, y, z])
+  }
 }

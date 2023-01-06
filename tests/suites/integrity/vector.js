@@ -114,9 +114,19 @@ export default () => {
       expect(Vector.initialize).to.be.a('function')
     })
 
-    it('linearInterpolation', () => {
+    it('LinearInterpolation', () => {
       expect(Vector).to.have.property('linearInterpolation')
       expect(Vector.linearInterpolation).to.be.a('function')
+    })
+
+    it('Cosine', () => {
+      expect(Vector).to.have.property('cosine')
+      expect(Vector.cosine).to.be.a('function')
+    })
+
+    it('CrossProduct', () => {
+      expect(Vector).to.have.property('crossProduct')
+      expect(Vector.crossProduct).to.be.a('function')
     })
   })
 
