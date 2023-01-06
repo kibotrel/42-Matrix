@@ -100,9 +100,9 @@ export default () => {
       expect(Numeral.random).to.be.a('function')
     })
 
-    it('Lerp', () => {
-      expect(Numeral).to.have.property('lerp')
-      expect(Numeral.lerp).to.be.a('function')
+    it('linearInterpolation', () => {
+      expect(Numeral).to.have.property('linearInterpolation')
+      expect(Numeral.linearInterpolation).to.be.a('function')
     })
   })
 

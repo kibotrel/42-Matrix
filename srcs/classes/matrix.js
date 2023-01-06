@@ -261,7 +261,7 @@ export class Matrix {
    * @throws {TypeError} - Interpolation factor must be real.
    * @throws {AssertionError} - Matrices must be of the same shape.
    */
-  static lerp(a, b, t) {
+  static linearInterpolation(a, b, t) {
     if (!(a instanceof Matrix) || !(b instanceof Matrix)) {
       throw new TypeError('Arguments must be instances of Matrix.')
     } else if (!(t instanceof Numeral)) {

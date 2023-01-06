@@ -8,5 +8,5 @@ sonarjs
 srcs
 stylelint
 stylelintcache
-lerp
-Lerp
+linearInterpolation
+linearInterpolation

@@ -216,7 +216,7 @@ export class Vector {
    * @throws {AssertionError} - Vector must not be empty.
    *
    */
-  dot(vector) {
+  dotProduct(vector) {
     if (!(vector instanceof Vector)) {
       throw new TypeError('Argument must be an instance of Vector.')
     } else if (this.size !== vector.size) {
@@ -229,11 +229,9 @@ export class Vector {
     // second each term of the second vector and use the inner product. Then, we can compute the real part of the result
     // to get the dot product. More details: https://college.cengage.com/mathematics/larson/elementary_linear/4e/shared/downloads/c08s4.pdf
 
-    const { r } = this.vector.reduce(
+    return this.vector.reduce(
       (result, value, index) =>
         result.add(value.multiply(vector.vector[index].conjugate())), new Numeral(0))
-
-    return new Numeral(r)
   }
 
   /**
@@ -306,7 +304,7 @@ export class Vector {
    * @throws {TypeError} - Interpolation factor must be real.
    * @throws {AssertionError} - Vectors must be of the same size.
    */
-  static lerp(a, b, t) {
+  static linearInterpolation(a, b, t) {
     if (!(a instanceof Vector) || !(b instanceof Vector)) {
       throw new TypeError('Arguments must be instances of Vector.')
     } else if (!(t instanceof Numeral)) {

@@ -86,9 +86,9 @@ export default () => {
       expect(Vector.initialize).to.be.a('function')
     })
 
-    it('Lerp', () => {
-      expect(Vector).to.have.property('lerp')
-      expect(Vector.lerp).to.be.a('function')
+    it('linearInterpolation', () => {
+      expect(Vector).to.have.property('linearInterpolation')
+      expect(Vector.linearInterpolation).to.be.a('function')
     })
   })
 
