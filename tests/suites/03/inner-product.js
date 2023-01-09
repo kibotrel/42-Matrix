@@ -11,7 +11,7 @@ export default () => {
       const v2 = new Vector([new Numeral(1), new Numeral(1)])
       const expected = new Numeral(0)
 
-      expect(v1.dotProduct(v2).equals(expected)).to.be.true
+      expect(v1.innerProduct(v2).equals(expected)).to.be.true
     })
 
     it('[1, 1] · [1, 1] = 2', () => {
@@ -19,7 +19,7 @@ export default () => {
       const v2 = new Vector([new Numeral(1), new Numeral(1)])
       const expected = new Numeral(2)
 
-      expect(v1.dotProduct(v2).equals(expected)).to.be.true
+      expect(v1.innerProduct(v2).equals(expected)).to.be.true
     })
 
     it('[-1, 6] · [3, 2] = 9', () => {
@@ -27,7 +27,31 @@ export default () => {
       const v2 = new Vector([new Numeral(3), new Numeral(2)])
       const expected = new Numeral(9)
 
-      expect(v1.dotProduct(v2).equals(expected)).to.be.true
+      expect(v1.innerProduct(v2).equals(expected)).to.be.true
+    })
+
+    it('[2 + i, 0, 4 - 5i] · [1 + i, 2 + i, 0] = 3 - i', () => {
+      const v1 = new Vector([new Numeral(2, 1), new Numeral(0), new Numeral(4, -5)])
+      const v2 = new Vector([new Numeral(1, 1), new Numeral(2, 1), new Numeral(0)])
+      const expected = new Numeral(3, -1)
+
+      expect(v1.innerProduct(v2).equals(expected)).to.be.true
+    })
+
+    it('[2 + i, 2.5, 4 - 5.5i] · [1 + i, 2.125 + i, 0] = 8.3125 - 3.5i', () => {
+      const v1 = new Vector([
+        new Numeral(2, 1),
+        new Numeral(2.5),
+        new Numeral(4, -5.5),
+      ])
+      const v2 = new Vector([
+        new Numeral(1, 1),
+        new Numeral(2.125, 1),
+        new Numeral(0),
+      ])
+      const expected = new Numeral(8.3125, -3.5)
+
+      expect(v1.innerProduct(v2).equals(expected)).to.be.true
     })
   })
 
@@ -37,7 +61,7 @@ export default () => {
         const v1 = new Vector([new Numeral(0), new Numeral(0)])
         const v2 = new Matrix([v1])
 
-        expect(() => v1.dotProduct(v2)).to.throw(
+        expect(() => v1.innerProduct(v2)).to.throw(
           TypeError,
           'Argument must be an instance of Vector.'
         )
@@ -47,7 +71,7 @@ export default () => {
         const v1 = new Vector([new Numeral(0), new Numeral(0)])
         const v2 = new Vector([new Numeral(0)])
 
-        expect(() => v1.dotProduct(v2)).to.throw(
+        expect(() => v1.innerProduct(v2)).to.throw(
           AssertionError,
           'Vectors must be of the same size.'
         )
@@ -57,7 +81,7 @@ export default () => {
         const v1 = new Vector([])
         const v2 = new Vector([])
 
-        expect(() => v1.dotProduct(v2)).to.throw(
+        expect(() => v1.innerProduct(v2)).to.throw(
           AssertionError,
           'Vectors must not be empty.'
         )

@@ -210,19 +210,20 @@ export class Vector {
   }
 
   /**
-   * Computes the dot product of two vectors.
-   * This is equivalent to multiplying the two vectors and then summing
-   * the result.
+   * Computes the inner product of two vectors.
+   * This is equivalent to multiplying the two vectors and summing the result.
+   * This is also equivalent to the dot product of two vectors extended to
+   * complex numbers.
    * 
    * @description Space complexity: O(n), time complexity: O(n).
-   * @param {Vector} vector - Vector to compute the dot product with.
-   * @returns {Numeral} - Result of the dot product.
+   * @param {Vector} vector - Vector to compute the inner product with.
+   * @returns {Numeral} - Result of the inner product.
    * @throws {AssertionError} - Vectors must be of the same size.
    * @throws {TypeError} - Argument must be an instance of Vector.
    * @throws {AssertionError} - Vector must not be empty.
    * @see https://college.cengage.com/mathematics/larson/elementary_linear/4e/shared/downloads/c08s4.pdf
    */
-  dotProduct(vector) {
+  innerProduct(vector) {
     if (!(vector instanceof Vector)) {
       throw new TypeError('Argument must be an instance of Vector.')
     } else if (this.size !== vector.size) {
@@ -234,6 +235,35 @@ export class Vector {
     return this.vector.reduce(
       (result, numeral, index) =>
         result.add(numeral.multiply(vector.vector[index].conjugate())),
+      new Numeral(0)
+    )
+  }
+
+  /**
+ * Computes the dot product of two vectors.
+ * This is equivalent to multiplying the two vectors and summing the result.
+ * 
+ * @description Space complexity: O(n), time complexity: O(n).
+ * @param {Vector} vector - Vector to compute the dot product with.
+ * @returns {Numeral} - Result of the dot product.
+ * @throws {AssertionError} - Vectors must be of the same size.
+ * @throws {TypeError} - Argument must be an instance of Vector.
+ * @throws {TypeError} - Non-real numbers are not supported, use innerProduct instead.
+ * @throws {AssertionError} - Vector must not be empty.
+ * @see https://en.wikipedia.org/wiki/Dot_product
+ */
+  dotProduct(vector) {
+    if (!(vector instanceof Vector)) {
+      throw new TypeError('Argument must be an instance of Vector.')
+    } else if (this.size !== vector.size) {
+      throw new AssertionError({ message: 'Vectors must be of the same size.' })
+    } else if (this.size === 0) {
+      throw new AssertionError({ message: 'Vectors must not be empty.' })
+    }
+
+    return this.vector.reduce(
+      (result, numeral, index) =>
+        result.add(numeral.multiply(vector.vector[index])),
       new Numeral(0)
     )
   }
@@ -413,7 +443,7 @@ export class Vector {
       })
     }
 
-    return a.dotProduct(b).divide(a.euclideanNorm().multiply(b.euclideanNorm()))
+    return a.innerProduct(b).divide(a.euclideanNorm().multiply(b.euclideanNorm()))
   }
 
   /**

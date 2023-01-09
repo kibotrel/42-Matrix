@@ -74,6 +74,13 @@ export default () => {
       expect(vector.toMatrix).to.be.a('function')
     })
 
+    it('innerProduct', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('innerProduct')
+      expect(vector.innerProduct).to.be.a('function')
+    })
+
     it('DotProduct', () => {
       const vector = new Vector()
 
