@@ -7,8 +7,8 @@ export const ex04 = {
   name: 'Exercise 04',
   callback: () => {
     describe('Divide', divide)
-    describe('Manhattan Distance', manhattanDistance)
-    describe('Euclidean Norm', euclideanNorm)
-    describe('Supremum Norm', supremumNorm)
+    describe('ManhattanDistance', manhattanDistance)
+    describe('EuclideanNorm', euclideanNorm)
+    describe('SupremumNorm', supremumNorm)
   },
 }
