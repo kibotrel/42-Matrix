@@ -107,6 +107,13 @@ export default () => {
       expect(matrix).to.have.property('trace')
       expect(matrix.trace).to.be.a('function')
     })
+
+    it('Transpose', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('transpose')
+      expect(matrix.transpose).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {

@@ -311,6 +311,29 @@ export class Matrix {
   }
 
   /**
+   * Transposes the matrix.
+   * 
+   * @description Space complexity: O(n*m), time complexity: O(n*m).
+   * @returns {Matrix} - Transposed matrix.
+   * @see https://en.wikipedia.org/wiki/Transpose
+   */
+  transpose() {
+    const matrix = []
+
+    for (let column = 0; column < this.columns; column++) {
+      const rowVector = []
+
+      for (let row = 0; row < this.rows; row++) {
+        rowVector.push(this.matrix[row].vector[column])
+      }
+
+      matrix.push(new Vector(rowVector))
+    }
+
+    return new Matrix(matrix)
+  }
+
+  /**
    * Computes the linear combination of a matrix and a vector.
    * 
    * @description Space complexity: O(n), time complexity: O(n).
