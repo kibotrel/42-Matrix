@@ -100,6 +100,13 @@ export default () => {
       expect(matrix).to.have.property('multiplyMatrix')
       expect(matrix.multiplyMatrix).to.be.a('function')
     })
+
+    it('Trace', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('trace')
+      expect(matrix.trace).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {

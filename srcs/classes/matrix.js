@@ -290,6 +290,27 @@ export class Matrix {
   }
 
   /**
+   * Computes the trace of the matrix.
+   *
+   * @description Space complexity: O(1), time complexity: O(n).
+   * @returns {Numeral} - Trace of the matrix.
+   * @throws {AssertionError} - Matrix must be square.
+   * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
+   */
+  trace() {
+    if (!this.isSquare()) {
+      throw new AssertionError({
+        message: 'Matrix must be square.'
+      })
+    }
+
+    return this.matrix.reduce(
+      (result, vector, index) => result.add(vector.vector.at(index)),
+      new Numeral(0)
+    )
+  }
+
+  /**
    * Computes the linear combination of a matrix and a vector.
    * 
    * @description Space complexity: O(n), time complexity: O(n).

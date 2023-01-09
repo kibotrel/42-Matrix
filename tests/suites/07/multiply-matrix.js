@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 import { AssertionError } from 'node:assert'
-import util from 'node:util'
+
 import { Numeral, Vector, Matrix } from '#classes'
 
 export default () => {
