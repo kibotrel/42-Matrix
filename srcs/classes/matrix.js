@@ -229,6 +229,67 @@ export class Matrix {
   }
 
   /**
+   * Multiply two matrices.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n*m).
+   * @param {Matrix} matrix - Matrix to multiply.
+   * @returns {Matrix} - Result of the matrix multiplication.
+   * @throws {TypeError} - Argument must be an instance of Matrix.
+   * @throws {AssertionError} - Argument's rows amount and base matrix columns amount must match.
+   * @see https://www.mathsisfun.com/algebra/matrix-multiplying.html
+   */
+  multiplyMatrix(matrix) {
+    if (!(matrix instanceof Matrix)) {
+      throw new TypeError('Argument must be an instance of Matrix.')
+    } else if (this.columns !== matrix.rows) {
+      throw new AssertionError({
+        message: 'Argument\'s rows amount and base matrix columns amount must match.'
+      })
+    }
+
+    const resultMatrix = []
+
+    for (let row = 0; row < this.rows; row++) {
+      const resultRow = []
+      const v1 = this.matrix[row]
+
+      for (let column = 0; column < matrix.columns; column++) {
+        const v2 = new Vector(
+          matrix.matrix.map((vector) => vector.vector[column])
+        )
+
+        resultRow.push(v1.dotProduct(v2))
+      }
+
+      resultMatrix.push(new Vector(resultRow))
+    }
+
+    return new Matrix(resultMatrix)
+  }
+
+  /**
+   * Multiply a matrix by a vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Vector} vector - Vector to multiply.
+   * @returns {Matrix} - Result of the matrix-vector multiplication.
+   * @throws {TypeError} - Argument must be an instance of Vector.
+   * @throws {AssertionError} - Vector size and base matrix columns amount must match.
+   * @see https://www.mathsisfun.com/algebra/matrix-multiplying.html
+   */
+  multiplyVector(vector) {
+    if (!(vector instanceof Vector)) {
+      throw new TypeError('Argument must be an instance of Vector.')
+    } else if (this.columns !== vector.size) {
+      throw new AssertionError({
+        message: 'Vector size and base matrix columns amount must match.'
+      })
+    }
+
+    return this.multiplyMatrix(vector.toMatrix(vector.size, 1))
+  }
+
+  /**
    * Computes the linear combination of a matrix and a vector.
    * 
    * @description Space complexity: O(n), time complexity: O(n).

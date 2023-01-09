@@ -86,6 +86,20 @@ export default () => {
       expect(matrix).to.have.property('toVector')
       expect(matrix.toVector).to.be.a('function')
     })
+
+    it('MultiplyVector', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('multiplyVector')
+      expect(matrix.multiplyVector).to.be.a('function')
+    })
+
+    it('MultiplyMatrix', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('multiplyMatrix')
+      expect(matrix.multiplyMatrix).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
