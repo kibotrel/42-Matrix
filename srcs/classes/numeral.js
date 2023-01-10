@@ -296,6 +296,16 @@ export class Numeral {
   }
 
   /**
+   * Clone the numeral
+   * 
+   * @description Space complexity: O(1), Time complexity: O(1).
+   * @returns {Numeral} - Clone of the numeral.
+   */
+  clone() {
+    return new Numeral(this.r, this.i)
+  }
+
+  /**
    * Generates a random Numeral.
    *
    * @description Space complexity: O(1), Time complexity: O(1).

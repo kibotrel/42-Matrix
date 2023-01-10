@@ -66,13 +66,11 @@ export class Vector {
       throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
-    const result = []
-
-    for (let index = 0; index < this.size; index++) {
-      result.push(this.vector[index].add(vector.vector[index]))
-    }
-
-    return new Vector(result)
+    return new Vector(
+      this.vector.map(
+        (numeral, index) => numeral.add(vector.vector[index])
+      )
+    )
   }
 
   /**
@@ -91,13 +89,11 @@ export class Vector {
       throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
-    const result = []
-
-    for (let index = 0; index < this.size; index++) {
-      result.push(this.vector[index].subtract(vector.vector[index]))
-    }
-
-    return new Vector(result)
+    return new Vector(
+      this.vector.map(
+        (numeral, index) => numeral.subtract(vector.vector[index])
+      )
+    )
   }
 
   /**
@@ -105,7 +101,7 @@ export class Vector {
    *
    * @description Space complexity: O(n), time complexity: O(n).
    * @param {Vector} vector - Vector to compare.
-   * @returns {boolean} - True if vectors are equal, false otherwise.
+   * @returns {Boolean} - True if vectors are equal, false otherwise.
    * @throws {AssertionError} - Vectors must be of the same size.
    * @throws {TypeError} - Argument must be an instance of Vector.
    */
@@ -116,13 +112,9 @@ export class Vector {
       throw new AssertionError({ message: 'Vectors must be of the same size.' })
     }
 
-    for (let index = 0; index < this.size; index++) {
-      if (!this.vector[index].equals(vector.vector[index])) {
-        return false
-      }
-    }
-
-    return true
+    return this.vector.every(
+      (value, index) => value.equals(vector.vector[index])
+    )
   }
 
   /**
@@ -138,13 +130,9 @@ export class Vector {
       throw new TypeError('Argument must be an instance of Numeral.')
     }
 
-    const result = []
-
-    for (let index = 0; index < this.size; index++) {
-      result.push(this.vector[index].multiply(scalar))
-    }
-
-    return new Vector(result)
+    return new Vector(
+      this.vector.map((numeral) => numeral.multiply(scalar))
+    )
   }
 
   /**
@@ -194,19 +182,19 @@ export class Vector {
       })
     }
 
-    const matrix = []
+    const matrixRows = []
 
-    for (let row = 0; row < rows; row++) {
-      const vector = []
+    this.vector.forEach((numeral, index) => {
+      const matrixRow = Math.floor(index / columns)
 
-      for (let column = 0; column < columns; column++) {
-        vector.push(this.vector[row * columns + column])
+      if (index % columns === 0) {
+        matrixRows.push(Vector.initialize(columns))
       }
 
-      matrix.push(new Vector(vector))
-    }
+      matrixRows[matrixRow].vector[index % columns] = numeral
+    })
 
-    return new Matrix(matrix)
+    return new Matrix(matrixRows)
   }
 
   /**
@@ -319,6 +307,17 @@ export class Vector {
   }
 
   /**
+   * Clone the vector.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @returns {Vector} - Cloned vector.
+   * @see https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy
+   */
+  clone() {
+    return new Vector(this.vector.map(numeral => numeral.clone()))
+  }
+
+  /**
    * Generates a random vector of size `size`.
    *
    * @description Space complexity: O(n), time complexity: O(n).
@@ -335,13 +334,9 @@ export class Vector {
       throw new AssertionError({ message: 'Size must be a positive integer.' })
     }
 
-    const vector = []
-
-    for (let index = 0; index < size; index++) {
-      vector.push(Numeral.random(type))
-    }
-
-    return new Vector(vector)
+    return new Vector(
+      Array.from({ length: size }, () => Numeral.random(type))
+    )
   }
 
   /**
@@ -365,13 +360,7 @@ export class Vector {
       throw new AssertionError({ message: 'Size must be a positive integer.' })
     }
 
-    const vector = []
-
-    for (let index = 0; index < size; index++) {
-      vector.push(value)
-    }
-
-    return new Vector(vector)
+    return new Vector(new Array(size).fill(value))
   }
 
   /**
