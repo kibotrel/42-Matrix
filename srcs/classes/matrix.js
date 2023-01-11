@@ -77,7 +77,7 @@ export class Matrix {
       }, 0)
     )
     const alignedColumns = aligned.map((column, index) =>
-      column.map((numeral) => numeral.padEnd(maxLengths[index]))
+      column.map((numeral) => numeral.padStart(maxLengths[index]))
     )
     const alignedRows = alignedColumns[0].map((_, index) =>
       alignedColumns.map((column) => column[index])
