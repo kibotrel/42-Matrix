@@ -204,7 +204,7 @@ export class Matrix {
   /**
  * Multiply two matrices.
  * 
- * @description Space complexity: O(n), time complexity: O(n*m).
+ * @description Space complexity: O(n), time complexity: O(n).
  * @param {Matrix} matrix - Matrix to multiply.
  * @returns {Matrix} - Result of the matrix multiplication.
  * @throws {TypeError} - Argument must be an instance of Matrix.
@@ -265,7 +265,7 @@ export class Matrix {
   /**
    * Computes the trace of the matrix.
    *
-   * @description Space complexity: O(1), time complexity: O(n).
+   * @description Space complexity: O(n), time complexity: O(n).
    * @returns {Numeral} - Trace of the matrix.
    * @throws {AssertionError} - Matrix must be square.
    * @see https://en.wikipedia.org/wiki/Trace_(linear_algebra)
@@ -286,7 +286,7 @@ export class Matrix {
   /**
    * Transposes the matrix.
    * 
-   * @description Space complexity: O(n*m), time complexity: O(n*m).
+   * @description Space complexity: O(nm), time complexity: O(nm).
    * @returns {Matrix} - Transposed matrix.
    * @see https://en.wikipedia.org/wiki/Transpose
    */
@@ -303,7 +303,7 @@ export class Matrix {
   /**
    * Clones the matrix.
    * 
-   * @description Space complexity: O(n*m), time complexity: O(n*m).
+   * @description Space complexity: O(n), time complexity: O(n).
    * @returns {Matrix} - Cloned matrix.
    * @see https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy
    */
@@ -314,7 +314,7 @@ export class Matrix {
   /**
    * Computes the reduced row echelon form of the matrix.
    * 
-   * @description Space complexity: O(?), time complexity: O(n*m).
+   * @description Space complexity: O(n²), time complexity: O(n³).
    * @returns {Matrix} - Reduced row echelon form of the matrix.
    * @see https://en.wikipedia.org/wiki/Reduced_row_echelon_form
    */

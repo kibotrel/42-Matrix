@@ -113,7 +113,7 @@ export class Vector {
     }
 
     return this.vector.every(
-      (value, index) => value.equals(vector.vector[index])
+      (numeral, index) => numeral.equals(vector.vector[index])
     )
   }
 
@@ -438,7 +438,7 @@ export class Vector {
   /**
    * Computes the cross product of two vectors.
    * 
-   * @description Space complexity: O(n), time complexity: O(n).
+   * @description Space complexity: O(1), time complexity: O(1).
    * @param {Vector} a - First vector.
    * @param {Vector} b - Second vector.
    * @returns {Vector} - Cross product of the two vectors.

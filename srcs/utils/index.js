@@ -1,6 +1,7 @@
 /**
  * Returns a number with a fixed number of decimals.
  *
+ * @description Space complexity: O(1), Time complexity: O(1).
  * @param {Number} number - Number to fix.
  * @param {Number} - Number of decimals to keep.
  * @returns {Number} - Number with a fixed number of decimals.
@@ -20,6 +21,7 @@ export const fixDecimals = (number, precision = 12) => {
 /**
  * Returns the number of decimals of a number.
  * 
+ * @description Space complexity: O(1), Time complexity: O(1).
  * @param {Number} number - Number to count decimals of.
  * @returns {Number} - Number of decimals.
  * @throws {TypeError} - Argument must be a number.
