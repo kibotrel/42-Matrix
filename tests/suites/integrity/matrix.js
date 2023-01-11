@@ -121,6 +121,20 @@ export default () => {
       expect(matrix).to.have.property('clone')
       expect(matrix.clone).to.be.a('function')
     })
+
+    it('SubMatrix', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('subMatrix')
+      expect(matrix.subMatrix).to.be.a('function')
+    })
+
+    it('Determinant', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('determinant')
+      expect(matrix.determinant).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -306,6 +320,69 @@ export default () => {
 
         expect(clone).to.be.instanceOf(Matrix)
         expect(clone.equals(matrix)).to.be.true
+      })
+    })
+
+    describe('Submatrix', () => {
+      it('3D to 2D matrix', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2), new Numeral(3)]),
+          new Vector([new Numeral(4), new Numeral(5), new Numeral(6)]),
+          new Vector([new Numeral(7), new Numeral(8), new Numeral(9)])
+        ])
+        const submatrix = matrix.subMatrix(0, 0)
+        const expectedMatrix = new Matrix([
+          new Vector([new Numeral(5), new Numeral(6)]),
+          new Vector([new Numeral(8), new Numeral(9)])
+        ])
+
+        expect(submatrix.equals(expectedMatrix)).to.be.true
+      })
+
+      it('1D to 0D matrix', () => {
+        const matrix = new Matrix([new Vector([new Numeral(1)])])
+        const submatrix = matrix.subMatrix(0, 0)
+
+        expect(submatrix.equals(new Matrix())).to.be.true
+      })
+
+      it('Arguments must be integers', () => {
+        const matrix = new Matrix([new Vector([new Numeral(1)])])
+
+        expect(() => matrix.subMatrix(0.5, 0)).to.throw(
+          TypeError,
+          'Arguments must be integers.'
+        )
+        expect(() => matrix.subMatrix(0, 0.5)).to.throw(
+          TypeError,
+          'Arguments must be integers.'
+        )
+      })
+
+      it('Arguments must be positive integers', () => {
+        const matrix = new Matrix([new Vector([new Numeral(1)])])
+
+        expect(() => matrix.subMatrix(-1, 0)).to.throw(
+          AssertionError,
+          'Arguments must be positive integers.'
+        )
+        expect(() => matrix.subMatrix(0, -1)).to.throw(
+          AssertionError,
+          'Arguments must be positive integers.'
+        )
+      })
+
+      it('Arguments must correspond to a position within the matrix', () => {
+        const matrix = new Matrix([new Vector([new Numeral(1)])])
+
+        expect(() => matrix.subMatrix(1, 0)).to.throw(
+          AssertionError,
+          'Arguments must correspond to a position within the matrix.'
+        )
+        expect(() => matrix.subMatrix(0, 1)).to.throw(
+          AssertionError,
+          'Arguments must correspond to a position within the matrix.'
+        )
       })
     })
   })

@@ -2,12 +2,12 @@ BOTREL
 camelcase
 commitlint
 Kilian
+linearInterpolation
 npmrc
 Parens
 sonarjs
 srcs
 stylelint
 stylelintcache
-linearInterpolation
-linearInterpolation
+Submatrix
 supremum

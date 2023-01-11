@@ -372,6 +372,85 @@ export class Matrix {
   }
 
   /**
+   * Computes the determinant of the matrix.
+   * 
+   * @description Space complexity: O(nⁿ⁻²), time complexity: O(nⁿ⁻¹).
+   * @returns {Numeral} - Determinant of the matrix.
+   * @throws {AssertionError} - Matrix must be square.
+   * @see https://www.cuemath.com/algebra/determinant-of-matrix/
+   * @see https://en.wikipedia.org/wiki/Determinant
+   * @see https://www.mathsisfun.com/algebra/matrix-determinant.html
+   */
+  determinant() {
+    if (!this.isSquare()) {
+      throw new AssertionError({
+        message: 'Matrix must be square.'
+      })
+    }
+
+    if (this.rows === 1) {
+      return this.matrix.at(0).vector.at(0)
+    } else if (this.rows === 2) {
+      return this.matrix.at(0).vector.at(0).multiply(
+        this.matrix.at(1).vector.at(1)
+      ).subtract(
+        this.matrix.at(0).vector.at(1).multiply(
+          this.matrix.at(1).vector.at(0)
+        )
+      )
+    } else {
+      let determinant = new Numeral(0)
+
+      for (let i = 0; i < this.columns; i++) {
+        const cofactor = this.subMatrix(0, i).determinant()
+        const subDeterminant = cofactor.multiply(this.matrix.at(0).vector.at(i))
+
+        if (i % 2 === 0) {
+          determinant = determinant.add(subDeterminant)
+        } else {
+          determinant = determinant.subtract(subDeterminant)
+        }
+      }
+
+      return determinant
+    }
+  }
+
+  /**
+   * Returns a matrix without the specified row and column.
+   * 
+   * @description Space complexity: O(n²), time complexity: O(n³).
+   * @param {Number} row - Row to be removed.
+   * @param {Number} column - Column to be removed.
+   * @returns {Matrix} - Submatrix.
+   * @throws {TypeError} - Row and column must be integers.
+   * @throws {AssertionError} - Row and column must be positive integers.
+   * @throws {AssertionError} - Row and column must be within the matrix.
+   * @see https://en.wikipedia.org/wiki/Submatrix
+   */
+  subMatrix(row, column) {
+    if (!Number.isInteger(row) || !Number.isInteger(column)) {
+      throw new TypeError('Arguments must be integers.')
+    } else if (row < 0 || column < 0) {
+      throw new AssertionError({
+        message: 'Arguments must be positive integers.'
+      })
+    } else if (row >= this.rows || column >= this.columns) {
+      throw new AssertionError({
+        message: 'Arguments must correspond to a position within the matrix.'
+      })
+    }
+
+    return new Matrix(
+      this.matrix.filter((vector, index) => index !== row).map(
+        (vector) => new Vector(
+          vector.vector.filter((numeral, index) => index !== column)
+        )
+      )
+    )
+  }
+
+  /**
    * Generates a random matrix of shape `rows` * `columns`.
    * 
    * @description Space complexity: O(n), time complexity: O(n).
