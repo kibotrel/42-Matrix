@@ -108,6 +108,13 @@ export default () => {
       expect(vector).to.have.property('supremumNorm')
       expect(vector.supremumNorm).to.be.a('function')
     })
+
+    it('Clone', () => {
+      const vector = new Vector()
+
+      expect(vector).to.have.property('clone')
+      expect(vector.clone).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -420,6 +427,15 @@ export default () => {
           AssertionError,
           'Vector must not be empty.'
         )
+      })
+    })
+
+    describe('Clone', () => {
+      it('Clone equals original', () => {
+        const original = new Vector([new Numeral(1), new Numeral(2), new Numeral(3)])
+        const clone = original.clone()
+
+        expect(original.equals(clone)).to.be.true
       })
     })
   })

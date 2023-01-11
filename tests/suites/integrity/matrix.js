@@ -114,6 +114,13 @@ export default () => {
       expect(matrix).to.have.property('transpose')
       expect(matrix.transpose).to.be.a('function')
     })
+
+    it('Clone', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('clone')
+      expect(matrix.clone).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -285,6 +292,20 @@ export default () => {
         expect(vector.vector[4].equals(new Numeral(5))).to.be.true
         expect(vector.vector[5].equals(new Numeral(6))).to.be.true
         expect(vector.size).to.equal(6)
+      })
+    })
+
+    describe('Clone', () => {
+      it('Clone equals original', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+          new Vector([new Numeral(3), new Numeral(4)]),
+          new Vector([new Numeral(5), new Numeral(6)])
+        ])
+        const clone = matrix.clone()
+
+        expect(clone).to.be.instanceOf(Matrix)
+        expect(clone.equals(matrix)).to.be.true
       })
     })
   })

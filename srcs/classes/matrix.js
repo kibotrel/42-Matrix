@@ -105,11 +105,11 @@ export class Matrix {
       })
     }
 
-    const result = this.matrix.map((vector, index) =>
-      vector.add(matrix.matrix[index])
+    return new Matrix(
+      this.matrix.map((vector, index) =>
+        vector.add(matrix.matrix[index])
+      )
     )
-
-    return new Matrix(result)
   }
 
   /**
@@ -130,11 +130,11 @@ export class Matrix {
       })
     }
 
-    const result = this.matrix.map((vector, index) =>
-      vector.subtract(matrix.matrix[index])
+    return new Matrix(
+      this.matrix.map((vector, index) =>
+        vector.subtract(matrix.matrix[index])
+      )
     )
-
-    return new Matrix(result)
   }
 
   /**
@@ -174,9 +174,9 @@ export class Matrix {
       throw new TypeError('Argument must be an instance of Numeral.')
     }
 
-    const result = this.matrix.map((vector) => vector.scale(numeral))
-
-    return new Matrix(result)
+    return new Matrix(
+      this.matrix.map((vector) => vector.scale(numeral))
+    )
   }
 
   /**
@@ -196,48 +196,21 @@ export class Matrix {
    * @returns {Vector} - Vector representation of the matrix.
    */
   toVector() {
-    return new Vector(this.matrix.map((vector) => vector.vector).flat())
+    return new Vector(
+      this.matrix.map((vector) => vector.vector).flat()
+    )
   }
 
   /**
-   * Generates a random matrix of shape `rows` * `columns`.
-   * 
-   * @description Space complexity: O(n), time complexity: O(n).
-   * @param {Number} rows - Number of rows.
-   * @param {Number} columns - Number of columns.
-   * @param {String} type - Type of the random numerals.
-   * @static
-   * @returns {Matrix} - Random matrix.
-   * @throws {AssertionError} - Dimensions must be positive integers.
-   */
-  static random(rows, columns, type = "natural") {
-    const matrix = []
-
-    if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
-      throw new TypeError('Dimensions must be integers.')
-    } else if (rows <= 0 || columns <= 0) {
-      throw new AssertionError({
-        message: 'Dimensions must be positive integers.'
-      })
-    }
-
-    for (let row = 0; row < rows; row++) {
-      matrix.push(Vector.random(columns, type))
-    }
-
-    return new Matrix(matrix)
-  }
-
-  /**
-   * Multiply two matrices.
-   * 
-   * @description Space complexity: O(n), time complexity: O(n*m).
-   * @param {Matrix} matrix - Matrix to multiply.
-   * @returns {Matrix} - Result of the matrix multiplication.
-   * @throws {TypeError} - Argument must be an instance of Matrix.
-   * @throws {AssertionError} - Argument's rows amount and base matrix columns amount must match.
-   * @see https://www.mathsisfun.com/algebra/matrix-multiplying.html
-   */
+ * Multiply two matrices.
+ * 
+ * @description Space complexity: O(n), time complexity: O(n*m).
+ * @param {Matrix} matrix - Matrix to multiply.
+ * @returns {Matrix} - Result of the matrix multiplication.
+ * @throws {TypeError} - Argument must be an instance of Matrix.
+ * @throws {AssertionError} - Argument's rows amount and base matrix columns amount must match.
+ * @see https://www.mathsisfun.com/algebra/matrix-multiplying.html
+ */
   multiplyMatrix(matrix) {
     if (!(matrix instanceof Matrix)) {
       throw new TypeError('Argument must be an instance of Matrix.')
@@ -318,19 +291,109 @@ export class Matrix {
    * @see https://en.wikipedia.org/wiki/Transpose
    */
   transpose() {
-    const matrix = []
+    return new Matrix(
+      this.matrix.at(0).vector.map((numeral, index) =>
+        new Vector(this.matrix.map((vector) =>
+          vector.vector[index])
+        )
+      )
+    )
+  }
 
-    for (let column = 0; column < this.columns; column++) {
-      const rowVector = []
+  /**
+   * Clones the matrix.
+   * 
+   * @description Space complexity: O(n*m), time complexity: O(n*m).
+   * @returns {Matrix} - Cloned matrix.
+   * @see https://developer.mozilla.org/en-US/docs/Glossary/Deep_copy
+   */
+  clone() {
+    return new Matrix(this.matrix.map((vector) => vector.clone()))
+  }
 
-      for (let row = 0; row < this.rows; row++) {
-        rowVector.push(this.matrix[row].vector[column])
+  /**
+   * Computes the reduced row echelon form of the matrix.
+   * 
+   * @description Space complexity: O(?), time complexity: O(n*m).
+   * @returns {Matrix} - Reduced row echelon form of the matrix.
+   * @see https://en.wikipedia.org/wiki/Reduced_row_echelon_form
+   */
+  reducedRowEchelonForm() {
+    let lead = 0
+    const matrix = this.clone()
+
+    for (let row = 0; row < matrix.rows; row++) {
+      if (matrix.columns <= lead) {
+        return matrix
       }
 
-      matrix.push(new Vector(rowVector))
+      let i = row
+
+      while (matrix.matrix[i].vector[lead].isZero()) {
+        i++
+
+        if (matrix.rows === i) {
+          i = row
+          lead++
+
+          if (matrix.columns === lead) {
+            return matrix
+          }
+        }
+      }
+
+      if (i !== row) {
+        const swap = matrix.matrix[i]
+
+        matrix.matrix[i] = matrix.matrix[row]
+        matrix.matrix[row] = swap
+      }
+
+      matrix.matrix[row] = new Vector(
+        matrix.matrix[row].vector.map(
+          (numeral) => numeral.divide(matrix.matrix[row].vector[lead])
+        )
+      )
+
+      for (let j = 0; j < this.rows; j++) {
+        if (j !== row) {
+          const subtractedVector = matrix.matrix[row].scale(
+            matrix.matrix[j].vector[lead]
+          )
+
+          matrix.matrix[j] = matrix.matrix[j].subtract(subtractedVector)
+        }
+      }
+
+      lead++
     }
 
-    return new Matrix(matrix)
+    return matrix
+  }
+
+  /**
+   * Generates a random matrix of shape `rows` * `columns`.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} rows - Number of rows.
+   * @param {Number} columns - Number of columns.
+   * @param {String} type - Type of the random numerals.
+   * @static
+   * @returns {Matrix} - Random matrix.
+   * @throws {AssertionError} - Dimensions must be positive integers.
+   */
+  static random(rows, columns, type = "natural") {
+    if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
+      throw new TypeError('Dimensions must be integers.')
+    } else if (rows <= 0 || columns <= 0) {
+      throw new AssertionError({
+        message: 'Dimensions must be positive integers.'
+      })
+    }
+
+    return new Matrix(
+      Array.from({ length: rows }, () => Vector.random(columns, type))
+    )
   }
 
   /**

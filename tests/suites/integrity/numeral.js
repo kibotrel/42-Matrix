@@ -120,6 +120,13 @@ export default () => {
       expect(numeral).to.have.property('isZero')
       expect(numeral.isZero).to.be.a('function')
     })
+
+    it('Clone', () => {
+      const numeral = new Numeral()
+
+      expect(numeral).to.have.property('clone')
+      expect(numeral.clone).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -627,6 +634,15 @@ export default () => {
         const numeral = new Numeral(1)
 
         expect(numeral.isZero()).to.be.false
+      })
+    })
+
+    describe('Clone', () => {
+      it('Clone equals original', () => {
+        const original = new Numeral(1)
+        const clone = original.clone()
+
+        expect(original.equals(clone)).to.be.true
       })
     })
   })

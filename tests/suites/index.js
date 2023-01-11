@@ -9,6 +9,7 @@ import { ex06 } from './06/index.js'
 import { ex07 } from './07/index.js'
 import { ex08 } from './08/index.js'
 import { ex09 } from './09/index.js'
+import { ex10 } from './10/index.js'
 
 export const suites = [
   integrity,
@@ -22,4 +23,5 @@ export const suites = [
   ex07,
   ex08,
   ex09,
+  ex10,
 ]
