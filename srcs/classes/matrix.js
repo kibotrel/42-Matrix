@@ -374,7 +374,7 @@ export class Matrix {
   /**
    * Computes the determinant of the matrix.
    * 
-   * @description Space complexity: O(nⁿ⁻²), time complexity: O(nⁿ⁻¹).
+   * @description Space complexity: O(n²), time complexity: O(n³).
    * @returns {Numeral} - Determinant of the matrix.
    * @throws {AssertionError} - Matrix must be square.
    * @see https://www.cuemath.com/algebra/determinant-of-matrix/
@@ -389,8 +389,14 @@ export class Matrix {
     }
 
     if (this.rows === 1) {
+      /**
+       * Space complexity O(1), time complexity O(1).
+       */
       return this.matrix.at(0).vector.at(0)
     } else if (this.rows === 2) {
+      /**
+       * Space complexity O(1), time complexity O(1).
+       */
       return this.matrix.at(0).vector.at(0).multiply(
         this.matrix.at(1).vector.at(1)
       ).subtract(
@@ -399,21 +405,90 @@ export class Matrix {
         )
       )
     } else {
-      let determinant = new Numeral(0)
+      /**
+       * Space complexity O(n²), time complexity O(n³).
+       */
 
-      for (let i = 0; i < this.columns; i++) {
-        const cofactor = this.subMatrix(0, i).determinant()
-        const subDeterminant = cofactor.multiply(this.matrix.at(0).vector.at(i))
+      return this.triangulation().diagonalProduct()
+    }
+  }
 
-        if (i % 2 === 0) {
-          determinant = determinant.add(subDeterminant)
-        } else {
-          determinant = determinant.subtract(subDeterminant)
-        }
+  /**
+   * Computes the triangular form of the matrix using Gaussian elimination method.
+   * 
+   * @description Space complexity: O(n²), time complexity: O(n³).
+   * @returns {Matrix} - Triangular form of the matrix.
+   * @throws {AssertionError} - Matrix must be square.
+   * @see https://en.wikipedia.org/wiki/Gaussian_elimination
+   */
+  triangulation() {
+    if (!this.isSquare()) {
+      throw new AssertionError({
+        message: 'Matrix must be square.'
+      })
+    }
+
+    const matrix = this.clone()
+
+    let pivotRow = 0
+    let pivotColumn = 0
+
+    while (pivotRow < matrix.rows && pivotColumn < matrix.columns) {
+      let iMax = pivotRow
+
+      for (let i = pivotRow + 1; i < matrix.rows; i++) {
+        const current = matrix.matrix.at(i).vector.at(pivotRow).absolute()
+        const max = matrix.matrix.at(iMax).vector.at(pivotColumn).absolute()
+
+        iMax = current.r > max.r ? i : iMax
       }
 
-      return determinant
+      if (matrix.matrix.at(iMax).vector.at(pivotColumn).isZero()) {
+        pivotColumn++
+      } else {
+        const swap = matrix.matrix.at(pivotRow)
+
+        matrix.matrix[pivotRow] = matrix.matrix.at(iMax)
+        matrix.matrix[iMax] = swap
+
+        for (let i = pivotRow + 1; i < matrix.rows; i++) {
+          const factor = matrix.matrix.at(i).vector.at(pivotColumn).divide(
+            matrix.matrix.at(pivotRow).vector.at(pivotColumn)
+          )
+
+          matrix.matrix[i].vector[pivotColumn] = new Numeral(0)
+
+          for (let j = pivotColumn + 1; j < matrix.columns; j++) {
+            matrix.matrix[i].vector[j] = matrix.matrix.at(i).vector.at(j).subtract(
+              matrix.matrix.at(pivotRow).vector.at(j).multiply(factor)
+            )
+          }
+        }
+        pivotRow++
+        pivotColumn++
+      }
     }
+
+    return matrix
+  }
+
+  /**
+   * Computes the product of the diagonal elements of the matrix.
+   * 
+   * @description Space complexity: O(1), time complexity: O(n).
+   * @returns {Numeral} - Product of the diagonal elements of the matrix.
+   * @throws {AssertionError} - Matrix must be square.
+   */
+  diagonalProduct() {
+    if (!this.isSquare()) {
+      throw new AssertionError({
+        message: 'Matrix must be square.'
+      })
+    }
+
+    return this.matrix.reduce((product, vector, index) =>
+      product.multiply(vector.vector.at(index).conjugate()), new Numeral(1)
+    )
   }
 
   /**

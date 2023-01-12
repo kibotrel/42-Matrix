@@ -61,6 +61,18 @@ export default () => {
 
       expect(result.equals(expected)).to.be.true
     })
+
+    it('[[2, i, 2], [4, 2i, 4], [8i, 4, 8i]] = 0', () => {
+      const matrix = new Matrix([
+        new Vector([new Numeral(2), new Numeral(0, 1), new Numeral(2)]),
+        new Vector([new Numeral(4), new Numeral(0, 2), new Numeral(4)]),
+        new Vector([new Numeral(0, 8), new Numeral(4), new Numeral(0, 8)])
+      ])
+      const result = matrix.determinant()
+      const expected = new Numeral(0)
+
+      expect(result.equals(expected)).to.be.true
+    })
   })
 
   describe('Errors', () => {

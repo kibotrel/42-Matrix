@@ -135,6 +135,20 @@ export default () => {
       expect(matrix).to.have.property('determinant')
       expect(matrix.determinant).to.be.a('function')
     })
+
+    it('triangulation', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('triangulation')
+      expect(matrix.triangulation).to.be.a('function')
+    })
+
+    it('DiagonalProduct', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('diagonalProduct')
+      expect(matrix.diagonalProduct).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -383,6 +397,42 @@ export default () => {
           AssertionError,
           'Arguments must correspond to a position within the matrix.'
         )
+      })
+    })
+
+    describe('Triangulation', () => {
+      it('Matrix must be square', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+        ])
+
+        expect(() => matrix.triangulation()).to.throw(
+          AssertionError,
+          'Matrix must be square.'
+        )
+      })
+    })
+
+    describe('DiagonalProduct', () => {
+      it('Matrix must be square', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+        ])
+
+        expect(() => matrix.diagonalProduct()).to.throw(
+          AssertionError,
+          'Matrix must be square.'
+        )
+      })
+
+      it('Diagonal product of a 2D matrix', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+          new Vector([new Numeral(3), new Numeral(4)])
+        ])
+        const product = matrix.diagonalProduct()
+
+        expect(product.equals(new Numeral(4))).to.be.true
       })
     })
   })
