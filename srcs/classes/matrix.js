@@ -492,6 +492,61 @@ export class Matrix {
   }
 
   /**
+   * Computes the inverse of this matrix.
+   * 
+   * @description Space complexity: O(n²), time complexity: O(n³).
+   * @returns {Matrix} - Inverse of this matrix.
+   * @throws {AssertionError} - Matrix must be square.
+   * @throws {AssertionError} - Matrix must not be singular.
+   * @see https://people.revoledu.com/kardi/tutorial/LinearAlgebra/MatrixInverseRREF.html
+   */
+  inverse() {
+    if (!this.isSquare()) {
+      throw new AssertionError({
+        message: 'Matrix must be square.'
+      })
+    }
+
+    if (this.determinant().isZero()) {
+      throw new AssertionError({
+        message: 'Matrix must not be singular.'
+      })
+    }
+
+    const identity = Matrix.identityMatrix(this.rows)
+    const augmented = this.augment(identity)
+    const reducedRowEchelonForm = augmented.reducedRowEchelonForm()
+
+    return new Matrix(
+      reducedRowEchelonForm.matrix.map(vector => new Vector(vector.vector.slice(this.columns))))
+  }
+
+  /**
+   * Computes the matrix augmentation of a pair of matrix.
+   * 
+   * @description Space complexity: O(n²), time complexity: O(n²).
+   * @param {Matrix} matrix - Matrix to append.
+   * @returns {Matrix} - Augmented matrix.
+   * @throws {TypeError} - Argument must be a matrix.
+   * @throws {AssertionError} - Matrices must have the same number of rows.
+   * @see https://en.wikipedia.org/wiki/Matrix_(mathematics)#Augmented_matrix
+   */
+  augment(matrix) {
+    if (!(matrix instanceof Matrix)) {
+      throw new TypeError('Argument must be a matrix.')
+    } else if (this.rows !== matrix.rows) {
+      throw new AssertionError({
+        message: 'Matrices must have the same number of rows.'
+      })
+    }
+
+    return new Matrix(this.matrix.map(
+      (vector, index) => new Vector([...vector.vector, ...matrix.matrix.at(index).vector])
+    ))
+
+  }
+
+  /**
    * Returns a matrix without the specified row and column.
    * 
    * @description Space complexity: O(n²), time complexity: O(n³).
@@ -609,5 +664,59 @@ export class Matrix {
     }
 
     return a.add(b.subtract(a).scale(t))
+  }
+
+  /**
+   * Creates an identity matrix of shape `size` * `size`.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} size - Size of the matrix.
+   * @returns {Matrix} - Identity matrix.
+   * @static
+   * @throws {TypeError} - Size must be an integer.
+   * @throws {AssertionError} - Size must be a positive integer.
+   * @see https://en.wikipedia.org/wiki/Identity_matrix
+   */
+  static identityMatrix(size) {
+    if (!Number.isInteger(size)) {
+      throw new TypeError('Size must be an integer.')
+    } else if (size <= 0) {
+      throw new AssertionError({
+        message: 'Size must be a positive integer.'
+      })
+    }
+
+    const matrix = Matrix.initialize(size, size)
+
+    for (let i = 0; i < size; i++) {
+      matrix.matrix[i].vector[i] = new Numeral(1)
+    }
+
+    return matrix
+  }
+
+  /**
+   * Creates a matrix of shape `rows` * `columns` with all elements initialized to 0.
+   * 
+   * @description Space complexity: O(n), time complexity: O(n).
+   * @param {Number} rows - Number of rows.
+   * @param {Number} columns - Number of columns.
+   * @returns {Matrix} - Matrix of shape `rows` * `columns` with all elements initialized to 0.
+   * @static
+   * @throws {TypeError} - Dimensions must be integers.
+   * @throws {AssertionError} - Dimensions must be positive integers.
+   */
+  static initialize(rows, columns) {
+    if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
+      throw new TypeError('Dimensions must be integers.')
+    } else if (rows <= 0 || columns <= 0) {
+      throw new AssertionError({
+        message: 'Dimensions must be positive integers.'
+      })
+    }
+
+    return new Matrix(
+      Array.from({ length: rows }, () => Vector.initialize(columns))
+    )
   }
 }
