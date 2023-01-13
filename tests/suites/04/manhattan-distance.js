@@ -1,8 +1,6 @@
-import { AssertionError } from 'node:assert'
-
 import { expect } from 'chai'
 
-import { Vector, Numeral, Matrix } from '#classes'
+import { Vector, Numeral } from '#classes'
 
 export default () => {
   describe('Vector', () => {

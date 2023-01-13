@@ -14,7 +14,6 @@ if (!isProductionEnvironment) {
 
   const file = await readFile(filePath, 'utf8')
   const updatedFile = file.replace(/sh/g, 'bash')
-  const array = []
 
   await writeFile(filePath, updatedFile)
 }

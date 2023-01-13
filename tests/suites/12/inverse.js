@@ -97,8 +97,6 @@ export default () => {
           new Vector([new Numeral(7), new Numeral(8), new Numeral(9)]),
         ])
 
-        const determinant = matrix.determinant()
-
         expect(() => matrix.inverse()).to.throw(
           AssertionError,
           'Matrix must not be singular.'
