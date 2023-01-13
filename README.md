@@ -12,8 +12,6 @@ This project provides you a complex number, vector and matrix library with a few
 Each type has its constructor and a few methods to perform basic operations.
 
 ```js
-import { Numeral, Vector, Matrix } from "#classes"
-
 // Will create a complex number 2 + 3i
 const a = new Numeral(2, 3)
 
@@ -47,13 +45,10 @@ const c = new Matrix([
 Since all types are immutable, you can chain operations:
 
 ```js
-import { Numeral, Vector, Matrix } from "#classes"
-
 const a = new Numeral(2, 3)
 const b = new Numeral(1, 2)
 
-// Wil hold the result of a + b => 3 + 5i
-
+// Will hold the result of a + b => 3 + 5i
 const c = a.add(b)
 ```
 
@@ -64,8 +59,6 @@ Every single method is documented in the source code. You'll find a few examples
 Little bonus, when you want to print any of the types, each class has a [`[util.inspect.custom]`](https://www.geeksforgeeks.org/node-js-util-inspect-method/) method that will print the type in a more readable way on the console.
 
 ```js
-import { Numeral, Vector, Matrix } from "#classes"
-
 const a = new Numeral(2, 3)
 
 console.log(a)
