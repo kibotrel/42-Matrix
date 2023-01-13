@@ -3,7 +3,6 @@
 ![CodeFactor](https://www.codefactor.io/repository/github/kibotrel/42-Matrix/badge)
 ![GitHub](https://img.shields.io/github/license/kibotrel/42-Matrix?color=blue)
 ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/kibotrel/42-Matrix?label=size)
-![Lines of code](https://img.shields.io/tokei/lines/github/kibotrel/42-Matrix?label=code%20lines)
 
 This project provides you a complex number, vector and matrix library with a few basic operations.
 
