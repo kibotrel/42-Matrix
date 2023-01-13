@@ -70,7 +70,7 @@ const a = new Numeral(2, 3)
 
 console.log(a)
 // Default output:
-// Numeral { real: 2, imaginary: 3 }
+// Numeral { r: 2, i: 3 }
 // Custom output:
 // 2 + 3i
 
@@ -112,6 +112,8 @@ console.log(c)
 // [4, 5, 6]
 // [7, 8, 9]
 ```
+
+> ℹ️ The default output isn't the real data stored, what's written in the example above is a simplified version of the real data.
 
 ### Tests
 
