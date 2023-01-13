@@ -522,6 +522,33 @@ export class Matrix {
   }
 
   /**
+   * Computes the rank of this matrix.
+   * 
+   * @description Space complexity: O(n²), time complexity: O(n³).
+   * @returns {Number} - Rank of this matrix.
+   * @see https://en.wikipedia.org/wiki/Rank_(linear_algebra)
+   * @see https://people.revoledu.com/kardi/tutorial/LinearAlgebra/MatrixRankRREF.html#:~:text=Matrix%20Rank%20using%20RREF&text=To%20compute%20rank%20of%20a,rank%20of%20the%20input%20matrix.
+   */
+  rank() {
+    const reducedRowEchelonForm = this.reducedRowEchelonForm()
+    const one = new Numeral(1)
+
+    let rank = 0
+
+    for (let i = 0; i < reducedRowEchelonForm.rows; i++) {
+      for (let j = i; j < reducedRowEchelonForm.columns; j++) {
+        if (reducedRowEchelonForm.matrix.at(i).vector.at(j).equals(one)) {
+          rank++
+          break
+        }
+      }
+    }
+
+
+    return new Numeral(rank)
+  }
+
+  /**
    * Computes the matrix augmentation of a pair of matrix.
    * 
    * @description Space complexity: O(n²), time complexity: O(n²).

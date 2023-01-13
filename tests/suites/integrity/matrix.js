@@ -163,6 +163,13 @@ export default () => {
       expect(matrix).to.have.property('augment')
       expect(matrix.augment).to.be.a('function')
     })
+
+    it('Rank', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('rank')
+      expect(matrix.rank).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
