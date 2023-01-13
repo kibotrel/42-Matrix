@@ -1,6 +1,6 @@
 import { expect } from 'chai'
 
-import { fixDecimals, countDecimals } from '#utils'
+import { fixDecimals, countDecimals, abs } from '#utils'
 
 export default () => {
   describe('FixDecimals', () => {
@@ -57,6 +57,24 @@ export default () => {
     it('Many decimals', () => {
       const result = countDecimals(1.23456789)
       const expected = 8
+
+      expect(result).to.be.a('number')
+      expect(result).to.equal(expected)
+    })
+  })
+
+  describe('Abs', () => {
+    it('Positive number', () => {
+      const result = abs(1)
+      const expected = 1
+
+      expect(result).to.be.a('number')
+      expect(result).to.equal(expected)
+    })
+
+    it('Negative number', () => {
+      const result = abs(-1)
+      const expected = 1
 
       expect(result).to.be.a('number')
       expect(result).to.equal(expected)

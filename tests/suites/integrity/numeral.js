@@ -309,6 +309,18 @@ export default () => {
         'Argument must be finite.'
       )
     })
+
+    it('Value between -1e-12 and 1e-12 rounded to 0', () => {
+      const numeral = new Numeral(1e-13)
+
+      expect(numeral.r).to.equal(0)
+      expect(numeral.i).to.equal(0)
+
+      const numeral2 = new Numeral(-1e-13)
+
+      expect(numeral2.r).to.equal(0)
+      expect(numeral2.i).to.equal(0)
+    })
   })
 
   describe('Extra instance methods', () => {

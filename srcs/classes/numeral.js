@@ -2,7 +2,7 @@ import util from 'node:util'
 
 import chalk from 'chalk'
 
-import { fixDecimals } from '#utils'
+import { fixDecimals, abs } from '#utils'
 
 /**
  * This is a number container. You can store both real 
@@ -25,18 +25,20 @@ export class Numeral {
   constructor(real = 0, imaginary = 0) {
     /**
      * Real part of the number.
+     * The comparison is done to mitigate IEEE 754 floating point errors.
      *
      * @readonly
      * @type {Number}
      */
-    this.r = real
+    this.r = abs(real) > 1e-12 ? real : 0
     /**
      * Imaginary part of the number.
+     * The comparison is done to mitigate IEEE 754 floating point errors.
      *
      * @readonly
      * @type {Number}
      */
-    this.i = imaginary
+    this.i = abs(imaginary) > 1e-12 ? imaginary : 0
   }
 
   /**

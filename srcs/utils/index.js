@@ -36,3 +36,14 @@ export const countDecimals = (number) => {
 
   return number.toString().split('.').at(1)?.length ?? 0
 }
+
+/**
+ * Returns the absolute value of a number.
+ * 
+ * @description Space complexity: O(1), Time complexity: O(1).
+ * @param {Number} number - Number to get absolute value of.
+ * @returns {Number} - Absolute value of number.
+ */
+export const abs = (number) => {
+  return number < 0 ? -number : number
+}
