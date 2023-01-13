@@ -149,6 +149,20 @@ export default () => {
       expect(matrix).to.have.property('diagonalProduct')
       expect(matrix.diagonalProduct).to.be.a('function')
     })
+
+    it('Inverse', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('inverse')
+      expect(matrix.inverse).to.be.a('function')
+    })
+
+    it('Augment', () => {
+      const matrix = new Matrix()
+
+      expect(matrix).to.have.property('augment')
+      expect(matrix.augment).to.be.a('function')
+    })
   })
 
   describe('Static methods', () => {
@@ -165,6 +179,16 @@ export default () => {
     it('linearInterpolation', () => {
       expect(Matrix).to.have.property('linearInterpolation')
       expect(Matrix.linearCombination).to.be.a('function')
+    })
+
+    it('IdentityMatrix', () => {
+      expect(Matrix).to.have.property('identityMatrix')
+      expect(Matrix.identityMatrix).to.be.a('function')
+    })
+
+    it('Initialize', () => {
+      expect(Matrix).to.have.property('initialize')
+      expect(Matrix.initialize).to.be.a('function')
     })
   })
 
@@ -435,6 +459,52 @@ export default () => {
         expect(product.equals(new Numeral(4))).to.be.true
       })
     })
+
+    describe('Augment', () => {
+      it('Argument must be an instance of Matrix', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+        ])
+
+        expect(() => matrix.augment()).to.throw(
+          TypeError,
+          'Argument must be an instance of Matrix.'
+        )
+      })
+
+      it('Argument must have the same number of rows as the matrix', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+        ])
+        const otherMatrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+          new Vector([new Numeral(3), new Numeral(4)])
+        ])
+
+        expect(() => matrix.augment(otherMatrix)).to.throw(
+          AssertionError,
+          'Matrices must have the same number of rows.'
+        )
+      })
+
+      it('Augment a 2D matrix', () => {
+        const matrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2)]),
+          new Vector([new Numeral(3), new Numeral(4)])
+        ])
+        const otherMatrix = new Matrix([
+          new Vector([new Numeral(5), new Numeral(6)]),
+          new Vector([new Numeral(7), new Numeral(8)])
+        ])
+        const augmentedMatrix = matrix.augment(otherMatrix)
+        const expectedMatrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(2), new Numeral(5), new Numeral(6)]),
+          new Vector([new Numeral(3), new Numeral(4), new Numeral(7), new Numeral(8)])
+        ])
+
+        expect(augmentedMatrix.equals(expectedMatrix)).to.be.true
+      })
+    })
   })
 
   describe('Extra static methods', () => {
@@ -497,6 +567,59 @@ export default () => {
 
       it('Matrix dimensions must be positive integers', () => {
         expect(() => Matrix.random(-1, 2)).to.throw(AssertionError, 'Dimensions must be positive integers.')
+      })
+    })
+
+    describe('IdentityMatrix', () => {
+      it('Argument must be an integer', () => {
+        expect(() => Matrix.identityMatrix(1.5)).to.throw(
+          TypeError,
+          'Argument must be an integer.'
+        )
+      })
+
+      it('Argument must be a positive integer', () => {
+        expect(() => Matrix.identityMatrix(-1)).to.throw(
+          AssertionError,
+          'Argument must be a positive integer.'
+        )
+      })
+
+      it('3D identity matrix', () => {
+        const matrix = Matrix.identityMatrix(3)
+        const expectedMatrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(0), new Numeral(0)]),
+          new Vector([new Numeral(0), new Numeral(1), new Numeral(0)]),
+          new Vector([new Numeral(0), new Numeral(0), new Numeral(1)])
+        ])
+
+        expect(matrix.equals(expectedMatrix)).to.be.true
+      })
+    })
+
+    describe('Initialize', () => {
+      it('Arguments must be integers', () => {
+        expect(() => Matrix.initialize(1.5, 2, new Numeral(1))).to.throw(
+          TypeError,
+          'Arguments must be integers.'
+        )
+      })
+
+      it('Arguments must be positive integers', () => {
+        expect(() => Matrix.initialize(-1, 2, new Numeral(1))).to.throw(
+          AssertionError,
+          'Arguments must be positive integers.'
+        )
+      })
+
+      it('Initialize a 2 * 3 matrix with all elements equal to 1', () => {
+        const matrix = Matrix.initialize(2, 3, new Numeral(1))
+        const expectedMatrix = new Matrix([
+          new Vector([new Numeral(1), new Numeral(1), new Numeral(1)]),
+          new Vector([new Numeral(1), new Numeral(1), new Numeral(1)])
+        ])
+
+        expect(matrix.equals(expectedMatrix)).to.be.true
       })
     })
   })

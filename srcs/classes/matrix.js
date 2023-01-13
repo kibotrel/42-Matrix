@@ -533,7 +533,7 @@ export class Matrix {
    */
   augment(matrix) {
     if (!(matrix instanceof Matrix)) {
-      throw new TypeError('Argument must be a matrix.')
+      throw new TypeError('Argument must be an instance of Matrix.')
     } else if (this.rows !== matrix.rows) {
       throw new AssertionError({
         message: 'Matrices must have the same number of rows.'
@@ -679,10 +679,10 @@ export class Matrix {
    */
   static identityMatrix(size) {
     if (!Number.isInteger(size)) {
-      throw new TypeError('Size must be an integer.')
+      throw new TypeError('Argument must be an integer.')
     } else if (size <= 0) {
       throw new AssertionError({
-        message: 'Size must be a positive integer.'
+        message: 'Argument must be a positive integer.'
       })
     }
 
@@ -701,22 +701,23 @@ export class Matrix {
    * @description Space complexity: O(n), time complexity: O(n).
    * @param {Number} rows - Number of rows.
    * @param {Number} columns - Number of columns.
+   * @param {Numeral} value - Value to initialize the matrix with.
    * @returns {Matrix} - Matrix of shape `rows` * `columns` with all elements initialized to 0.
    * @static
    * @throws {TypeError} - Dimensions must be integers.
    * @throws {AssertionError} - Dimensions must be positive integers.
    */
-  static initialize(rows, columns) {
+  static initialize(rows, columns, value = new Numeral(0)) {
     if (!Number.isInteger(rows) || !Number.isInteger(columns)) {
-      throw new TypeError('Dimensions must be integers.')
+      throw new TypeError('Arguments must be integers.')
     } else if (rows <= 0 || columns <= 0) {
       throw new AssertionError({
-        message: 'Dimensions must be positive integers.'
+        message: 'Arguments must be positive integers.'
       })
     }
 
     return new Matrix(
-      Array.from({ length: rows }, () => Vector.initialize(columns))
+      Array.from({ length: rows }, () => Vector.initialize(columns, value))
     )
   }
 }
