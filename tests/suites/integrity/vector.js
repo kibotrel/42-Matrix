@@ -1,7 +1,8 @@
 import { AssertionError } from 'node:assert'
+import util from 'node:util'
 
 import { expect } from 'chai'
-import util from 'util'
+
 
 import { Vector, Numeral, Matrix } from '#classes'
 

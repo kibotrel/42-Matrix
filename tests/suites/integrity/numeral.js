@@ -1,5 +1,7 @@
+import util from 'node:util'
+
 import { expect } from 'chai'
-import util from 'util'
+
 
 import { Numeral } from '#classes'
 

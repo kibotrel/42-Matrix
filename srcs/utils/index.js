@@ -3,7 +3,7 @@
  *
  * @description Space complexity: O(1), Time complexity: O(1).
  * @param {Number} number - Number to fix.
- * @param {Number} - Number of decimals to keep.
+ * @param {Number} precision - Number of decimals to keep.
  * @returns {Number} - Number with a fixed number of decimals.
  * @throws {TypeError} - Argument must be a number.
  * @throws {TypeError} - Argument must be finite.
