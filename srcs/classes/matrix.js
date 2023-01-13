@@ -747,4 +747,65 @@ export class Matrix {
       Array.from({ length: rows }, () => Vector.initialize(columns, value))
     )
   }
+
+  /**
+   * Create a 3D projection matrix.
+   * 
+   * @description Space complexity: O(1), time complexity: O(1).
+   * @param {Number} fov - Field of view in degrees.
+   * @param {Number} ratio - Aspect ratio.
+   * @param {Number} near - Near plane distance from the camera.
+   * @param {Number} far - Far plane distance from the camera.
+   * @returns {Matrix} - 3D projection matrix.
+   * @static
+   * @throws {TypeError} - Arguments must be numbers.
+   * @throws {AssertionError} - Plane distances must positive
+   * @throws {AssertionError} - Near plane distance must be less than far plane distance.
+   * @see https://www.scratchapixel.com/lessons/3d-basic-rendering/perspective-and-orthographic-projection-matrix/building-basic-perspective-projection-matrix.html
+   */
+  static projectionMatrix(fov = 90, ratio = 1, near = 0.1, far = 100) {
+    if (
+      typeof fov !== 'number' ||
+      typeof ratio !== 'number' ||
+      typeof near !== 'number' ||
+      typeof far !== 'number'
+    ) {
+      throw new TypeError('Arguments must be numbers.')
+    } else if (near <= 0 || far <= 0) {
+      throw new AssertionError({
+        message: 'Plane distances must positive'
+      })
+    } else if (near >= far) {
+      throw new AssertionError({
+        message: 'Near plane distance must be less than far plane distance.'
+      })
+    } else {
+      const matrix = Matrix.initialize(4, 4)
+      const scale = 1 / Math.tan(fov * 0.5 * Math.PI / 180)
+
+      /**
+       * Scale the x component of the projected coordinate according to the aspect ratio.
+       */
+      matrix.matrix[0].vector[0] = new Numeral(scale / ratio)
+      /**
+       * Scale the y component of the projected coordinate according to the aspect ratio.
+       */
+      matrix.matrix[1].vector[1] = new Numeral(scale / ratio)
+      /**
+       * Translate the z component of the projected coordinate.
+       */
+      matrix.matrix[2].vector[2] = new Numeral(-far / (far - near))
+      /**
+       * Translate the w component of the projected coordinate.
+       */
+      matrix.matrix[3].vector[2] = new Numeral(-far * near / (far - near))
+      /**
+       * Set the w component of the projected coordinate to -1.
+       */
+      matrix.matrix[2].vector[3] = new Numeral(-1)
+
+
+      return matrix
+    }
+  }
 }

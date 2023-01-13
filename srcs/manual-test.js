@@ -61,5 +61,4 @@ import { Numeral, Vector, Matrix } from "#classes"
  *   new Vector([new Numeral(0), new Numeral(1)]),
  *   new Vector([new Numeral(1), new Numeral(0)]),
  * ]))
-
-
+ */
