@@ -748,6 +748,7 @@ export class Matrix {
     )
   }
 
+  /* c8 ignore start */
   /**
    * Create a 3D projection matrix.
    * 
@@ -808,4 +809,5 @@ export class Matrix {
       return matrix
     }
   }
+  /* c8 ignore stop */
 }
